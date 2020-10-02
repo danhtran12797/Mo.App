@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListCustomerActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            app:cardElevation="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
+            <FrameLayout
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/search_edit_text"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:padding="10dp"
+                    android:background="@drawable/custom_edit_text_search"
+                    android:hint="Tìm kiếm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/add_image_view"
+                    android:layout_marginRight="12dp"
+                    app:tint="@color/colorAccent"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_baseline_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/customer_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/row_customer"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
