@@ -4,22 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class ListCustomerActivity extends AppCompatActivity {
+public class ListCustomerActivity extends BaseActivity implements CustomerAdapter.CustomerInterface {
 
-    EditText editTextSearch;
-    ImageView imageviewAdd;
-    RecyclerView recyclerView;
-    ArrayList<Customer> arrayList;
+    private EditText editTextSearch;
+    private ImageView imageviewAdd;
+    private ImageView imageviewClose;
+    private RecyclerView recyclerView;
+    private CustomerAdapter customerAdapter;
+    private CustomerViewModel customerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,33 +34,57 @@ public class ListCustomerActivity extends AppCompatActivity {
 
         editTextSearch = findViewById(R.id.search_edit_text);
         imageviewAdd = findViewById(R.id.add_image_view);
-        recyclerView=findViewById(R.id.customer_recycler_view);
+        imageviewClose = findViewById(R.id.close_image_view);
+        recyclerView = findViewById(R.id.customer_recycler_view);
 
-        loadData();
+        customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
 
-        CustomerAdapter adapter=new CustomerAdapter(arrayList);
+        customerAdapter = new CustomerAdapter(customerViewModel.getCustomerList().getValue(), this);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(customerAdapter);
+
+
+        customerViewModel.getCustomerList().observe(this, new Observer<List<Customer>>() {
+            @Override
+            public void onChanged(List<Customer> customers) {
+                customerAdapter.submitList(customers);
+            }
+        });
+
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                customerAdapter.getFilter().filter(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length()>0){
+                if (s.length() > 0) {
                     imageviewAdd.setVisibility(View.GONE);
-                }else{
+                    imageviewClose.setVisibility(View.VISIBLE);
+                } else {
                     imageviewAdd.setVisibility(View.VISIBLE);
+                    imageviewClose.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String text = v.getText().toString();
+                    if (text.length() > 0)
+                        customerAdapter.getFilter().filter(text);
+                    closeKeyboard();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -64,37 +94,20 @@ public class ListCustomerActivity extends AppCompatActivity {
                 startActivity(new Intent(ListCustomerActivity.this, InforCustomerActivity.class));
             }
         });
+
+        imageviewClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editTextSearch.setText("");
+                customerAdapter.getFilter().filter("");
+                imageviewAdd.setVisibility(View.VISIBLE);
+                imageviewClose.setVisibility(View.GONE);
+            }
+        });
     }
 
-    public void loadData(){
-        arrayList=new ArrayList<>();
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-        arrayList.add(new Customer("Danh Trần Hùng", "0958357395", "123 đường 32 phường Bà Trưng", "Viet Nam", "20"));
-//        arrayList.add(new Customer("Đặng Văn B", "096355398", "56/1 đường Số 6 phường Hiệp Bình", "Campuchia", "40"));
-//        arrayList.add(new Customer("Bùi Thị P", "0325907305", "12/7 đường 32 phường Lê Duẩn", "Lao", "199"));
-//        arrayList.add(new Customer("Nguyễn Văn D", "0328367312", "99/100 đường 32 phường Không Tên", "Indonesia", "54"));
-//        arrayList.add(new Customer("Đặng Công L", "0328367312", "324/11 đường 32 phường Bình Chánh", "Đông Timor", "96"));
-//        arrayList.add(new Customer("Trần Hùng Danh", "0328363212", "44/09 đường 32 phường 32", "Đông Timor", "26"));
-//        arrayList.add(new Customer("Trần Thị N", "0334367362", "345 đường 32 phường 21", "Singapore", "100"));
-//        arrayList.add(new Customer("Nguyễn thị O", "0368367392", "231 đường 32 phường Hiệp Bình", "Philippines", "56"));
+    @Override
+    public void update(List<Customer> customers) {
+        customerViewModel.update(customers);
     }
 }

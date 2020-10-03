@@ -1,62 +1,116 @@
 package com.thd.danhtran12797.moapp;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHolder> {
+public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewHolder> implements Filterable {
 
-    ArrayList<Customer> customerArrayList;
+    List<Customer> customersListAll;
+    CustomerInterface customerInterface;
 
-    public CustomerAdapter(ArrayList<Customer> customerArrayList) {
-        this.customerArrayList = customerArrayList;
+    public CustomerAdapter(List<Customer> customersListAll, CustomerInterface customerInterface) {
+        super(Customer.itemCallback);
+        this.customerInterface = customerInterface;
+        this.customersListAll = new ArrayList<>(customersListAll);
     }
 
     @NonNull
     @Override
     public CustomerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.row_customer, null);
+        View view = layoutInflater.inflate(R.layout.row_customer, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomerAdapter.ViewHolder holder, int position) {
-        Customer customer = customerArrayList.get(position);
-
-//        holder.kilomet.setText("("+customer.getKilomet()+" km)");
-        holder.name.setText(customer.getName());
-        holder.phone.setText(customer.getPhone());
-        holder.classify.setText(customer.getClassify());
-        holder.address.setText(customer.getAddress());
+        Customer customer = getItem(position);
+        holder.bind(customer);
     }
 
     @Override
-    public int getItemCount() {
-        return customerArrayList.size();
+    public Filter getFilter() {
+        return myFilter;
     }
+
+    Filter myFilter = new Filter() {
+
+        //Automatic on background thread
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            List<Customer> filteredList = new ArrayList<>();
+
+            if (charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(customersListAll);
+            } else {
+                for (Customer customer : customersListAll) {
+                    if (customer.getName().toLowerCase().contains(charSequence.toString().toLowerCase().trim())) {
+                        filteredList.add(customer);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        //Automatic on UI thread
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            customerInterface.update((List<Customer>) filterResults.values);
+        }
+    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        TextView address;
-        TextView phone;
-        TextView kilomet;
-        TextView classify;
+        TextView nameTextView;
+        TextView addressTextView;
+        TextView phoneTextView;
+        TextView kilometTextView;
+        TextView classifyTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name_text_view);
-            address = itemView.findViewById(R.id.address_text_view);
-            phone = itemView.findViewById(R.id.phone_text_view);
-            classify = itemView.findViewById(R.id.cassify_text_view);
-            kilomet = itemView.findViewById(R.id.kilomet_text_view);
+            nameTextView = itemView.findViewById(R.id.name_text_view);
+            addressTextView = itemView.findViewById(R.id.address_text_view);
+            phoneTextView = itemView.findViewById(R.id.phone_text_view);
+            classifyTextView = itemView.findViewById(R.id.cassify_text_view);
+            kilometTextView = itemView.findViewById(R.id.kilomet_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), InforCustomerActivity.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
         }
+
+        public void bind(Customer customer) {
+            nameTextView.setText(customer.getName());
+            phoneTextView.setText(customer.getPhone());
+            addressTextView.setText(customer.getAddress());
+            classifyTextView.setText(customer.getClassify());
+            kilometTextView.setText("("+customer.getKilomet() +" km)");
+        }
+    }
+
+    interface CustomerInterface {
+        void update(List<Customer> customers);
     }
 }

@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/search_edit_text"
+                    android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:padding="10dp"
@@ -36,6 +37,15 @@
                     android:src="@drawable/ic_baseline_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/close_image_view"
+                    android:layout_marginRight="12dp"
+                    app:tint="@android:color/black"
+                    android:visibility="gone"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_baseline_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </FrameLayout>
         </androidx.cardview.widget.CardView>
     </com.google.android.material.appbar.AppBarLayout>
@@ -43,7 +53,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/customer_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:listitem="@layout/row_customer"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
