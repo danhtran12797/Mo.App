@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListCustomerActivity">
+    tools:context=".views.ListCustomerActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:background="@android:color/white"
@@ -54,7 +54,7 @@
         android:id="@+id/customer_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/row_customer"
+        tools:listitem="@layout/customer_row"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 

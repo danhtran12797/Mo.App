@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="product"
+            type="com.thd.danhtran12797.moapp.models.Product" />
+        <variable
+            name="isLoading"
+            type="Boolean" />
+        <import type="android.view.View"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        tools:context=".views.DetailProductActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:backgroundTint="@color/white"
+                app:liftOnScroll="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/productDetailToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageEditLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/productDetailLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageProduct"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:productImage="@{product.image}"
+                    android:src="@drawable/product_placeholder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/takePhotoImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_add_a_photo"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageProduct"
+                    app:layout_constraintEnd_toEndOf="@+id/imageProduct"
+                    app:layout_constraintStart_toEndOf="@+id/imageProduct"
+                    app:tint="@color/colorAccent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/productDetailLayout"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/saveProductButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageEditLayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên sản phẩm: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/nameEditText"
+                        android:focusable="false"
+                        android:text="@{product.name}"
+                        android:hint="Nhập tên sản phẩm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="Băng keo trong - 50 mic" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Qui cách: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/specEditText"
+                        android:text="@{product.spec}"
+                        android:hint="Nhập quy cách"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="4F8* 100Y (90 mét)" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn vị tính: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/unitEditText"
+                        android:text="@{product.unit}"
+                        android:hint="Nhập đơn vị"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="Cuộn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chất liệu: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/materialEditText"
+                        android:text="@{product.material}"
+                        android:hint="Nhập chất liệu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="OOP" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chiều rộng: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/widthEditText"
+                        android:text="@{product.width}"
+                        android:hint="Nhập chiều rộng"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="10- 288mm" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chiều dài: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/lengthEditText"
+                        android:text="@{product.length}"
+                        android:hint="Nhập chiều dài"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="35- 1000m" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Độ dày: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/thicknessEditText"
+                        android:text="@{product.thickness}"
+                        android:hint="Nhập độ dày"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="35- 65mic" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Màu sắc: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/colorEditText"
+                        android:text="@{product.color}"
+                        android:hint="Nhập màu sắc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="Trong sutts, nâu, màu" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chịu lực: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/powerEditText"
+                        android:text="@{product.bearing}"
+                        android:hint="Nhập chịu lực"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text=">=24N/10mm" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lực bám dính: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/adhForceEditText"
+                        android:text="@{product.adh_force}"
+                        android:hint="Nhập lực bám dính"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text=">=4N/100mm" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Độ giãn: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/elasEditText"
+                        android:text="@{product.elas}"
+                        android:hint="Nhập độ giãn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="162%" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đặc điểm: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/characEditText"
+                        android:text="@{product.charac}"
+                        android:hint="Nhập đặc điểm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="Không thấm nức" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Giá: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/priceEditText"
+                        android:text='@{product.price}'
+                        android:hint="Nhập giá sản phẩm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="6000 đ" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hạn sử dụng: "
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/expDateEditText"
+                        android:text="@{product.exp_date}"
+                        android:hint="Nhập hạn sử dụng"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        tools:text="12/2025" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/saveProductButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:padding="12dp"
+                android:text="Lưu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productDetailLayout" />
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=gone}" />
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

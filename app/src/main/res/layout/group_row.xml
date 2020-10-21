@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="group"
+            type="com.thd.danhtran12797.moapp.models.Group" />
+
+        <variable
+            name="groupInterface"
+            type="com.thd.danhtran12797.moapp.adapters.GroupAdapter.GroupInterface" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/groupRelativeLayout"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->groupInterface.onItemClick(group)}"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/nameGroupTextView"
+                    android:textColor="@color/colorPrimary"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_toLeftOf="@id/seeMoreImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:text="@{group.name}"
+                    tools:text="Nhóm băng keo văn phòng, gia đình, dán thùng" />
+
+                <ImageView
+                    android:id="@+id/seeMoreImageView"
+                    android:visibility="gone"
+                    app:tint="@color/colorAccent"
+                    android:layout_marginLeft="3dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/ic_baseline_arrow_forward" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecyclerView"
+                android:background="@color/backgroundGroupDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/category_row" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</layout>

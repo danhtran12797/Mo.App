@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray"
     android:orientation="vertical"
-    tools:context=".InforCustomerActivity">
-
+    tools:context=".views.InforCustomerActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

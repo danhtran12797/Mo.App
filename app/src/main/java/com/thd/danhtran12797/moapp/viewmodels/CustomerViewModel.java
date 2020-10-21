@@ -1,8 +1,10 @@
-package com.thd.danhtran12797.moapp;
+package com.thd.danhtran12797.moapp.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.thd.danhtran12797.moapp.models.Customer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/groupDetailAppBarLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:backgroundTint="@color/white"
+            app:liftOnScroll="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/groupDetailToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/groupDetailRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/backgroundGroupDetail"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groupDetailAppBarLayout"
+            app:spanCount="3" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addCategoryFloating"
+                android:src="@drawable/ic_add_group"
+                app:backgroundTint="@color/white"
+                app:borderWidth="2dp"
+                app:rippleColor="@color/colorPrimaryDark"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=gone}" />
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

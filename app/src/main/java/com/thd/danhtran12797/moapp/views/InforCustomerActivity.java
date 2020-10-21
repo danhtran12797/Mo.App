@@ -1,8 +1,10 @@
-package com.thd.danhtran12797.moapp;
+package com.thd.danhtran12797.moapp.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.thd.danhtran12797.moapp.R;
 
 public class InforCustomerActivity extends AppCompatActivity {
 

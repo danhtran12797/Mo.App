@@ -1,17 +1,17 @@
-package com.thd.danhtran12797.moapp;
+package com.thd.danhtran12797.moapp.adapters;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.thd.danhtran12797.moapp.databinding.CustomerRowBinding;
+import com.thd.danhtran12797.moapp.models.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,12 @@ import java.util.List;
 public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewHolder> implements Filterable {
 
     List<Customer> customersListAll;
-    CustomerInterface customerInterface;
+    CustomerAllInterface customerAllInterface;
+    OnItemClickListener itemClickListener;
 
-    public CustomerAdapter(List<Customer> customersListAll, CustomerInterface customerInterface) {
+    public CustomerAdapter(List<Customer> customersListAll, CustomerAllInterface customerAllInterface) {
         super(Customer.itemCallback);
-        this.customerInterface = customerInterface;
+        this.customerAllInterface = customerAllInterface;
         this.customersListAll = new ArrayList<>(customersListAll);
     }
 
@@ -31,14 +32,15 @@ public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewH
     @Override
     public CustomerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.row_customer, parent, false);
-        return new ViewHolder(view);
+        CustomerRowBinding customerRowBinding=CustomerRowBinding.inflate(layoutInflater, parent, false);
+        return new ViewHolder(customerRowBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomerAdapter.ViewHolder holder, int position) {
         Customer customer = getItem(position);
-        holder.bind(customer);
+        holder.rowCustomerBinding.setCustomer(customer);
+        holder.rowCustomerBinding.executePendingBindings();
     }
 
     @Override
@@ -72,45 +74,39 @@ public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewH
         //Automatic on UI thread
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            customerInterface.update((List<Customer>) filterResults.values);
+            customerAllInterface.update((List<Customer>) filterResults.values);
         }
     };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTextView;
-        TextView addressTextView;
-        TextView phoneTextView;
-        TextView kilometTextView;
-        TextView classifyTextView;
+        CustomerRowBinding rowCustomerBinding;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            nameTextView = itemView.findViewById(R.id.name_text_view);
-            addressTextView = itemView.findViewById(R.id.address_text_view);
-            phoneTextView = itemView.findViewById(R.id.phone_text_view);
-            classifyTextView = itemView.findViewById(R.id.cassify_text_view);
-            kilometTextView = itemView.findViewById(R.id.kilomet_text_view);
+        public ViewHolder(@NonNull CustomerRowBinding  binding) {
+            super(binding.getRoot());
+
+            this.rowCustomerBinding=binding;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), InforCustomerActivity.class);
-                    view.getContext().startActivity(intent);
+                    int position =getAdapterPosition();
+                    if(itemClickListener!=null&&position!=RecyclerView.NO_POSITION){
+                        itemClickListener.onItemClick(getItem(position));
+                    }
                 }
             });
         }
-
-        public void bind(Customer customer) {
-            nameTextView.setText(customer.getName());
-            phoneTextView.setText(customer.getPhone());
-            addressTextView.setText(customer.getAddress());
-            classifyTextView.setText(customer.getClassify());
-            kilometTextView.setText("("+customer.getKilomet() +" km)");
-        }
     }
 
-    interface CustomerInterface {
+    public interface OnItemClickListener {
+        void onItemClick(Customer customer);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
+
+    public interface CustomerAllInterface {
         void update(List<Customer> customers);
     }
 }

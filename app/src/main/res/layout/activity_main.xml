@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:backgroundTint="@android:color/white"
     android:layout_height="match_parent"
-    android:backgroundTint="@android:color/white"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".views.MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:id="@+id/username_text_input_layout"
         android:layout_height="wrap_content"
-        app:errorEnabled="true">
+        android:layout_width="match_parent"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:hint="Tên đăng nhập"
-            android:inputType="text" />
+            android:id="@+id/username_edit_text"
+            android:inputType="text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:id="@+id/textInputLayout"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="@+id/login_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/login_button"
+        app:layout_constraintTop_toBottomOf="@+id/username_text_input_layout"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:hint="Mật khẩu"
-            android:inputType="textPassword" />
+            android:id="@+id/password_edit_text"
+            android:inputType="textPassword"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/login_button"
         android:enabled="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/login_button"
+        android:layout_height="57dp"
         android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
         android:onClick="ListCustomer"
         android:padding="13dp"
         android:text="Đăng nhập"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

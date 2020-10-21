@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+        android:background="@drawable/custom_dialog_radius"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm nhóm"
+                android:textColor="#000"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/nameGroupTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Tên nhóm" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/negative_button"
+                    android:layout_marginRight="10dp"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hủy"
+                    android:textColor="@color/colorPrimary" />
+
+                <Button
+                    android:id="@+id/positive_button"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xác nhận"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=gone}" />
+    </RelativeLayout>
+</layout>

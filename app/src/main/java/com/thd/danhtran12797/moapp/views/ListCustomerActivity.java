@@ -1,4 +1,4 @@
-package com.thd.danhtran12797.moapp;
+package com.thd.danhtran12797.moapp.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,42 +7,36 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.thd.danhtran12797.moapp.adapters.CustomerAdapter;
+import com.thd.danhtran12797.moapp.databinding.ActivityListCustomerBinding;
+import com.thd.danhtran12797.moapp.models.Customer;
+import com.thd.danhtran12797.moapp.viewmodels.CustomerViewModel;
 
 import java.util.List;
 
-public class ListCustomerActivity extends BaseActivity implements CustomerAdapter.CustomerInterface {
+public class ListCustomerActivity extends BaseActivity implements CustomerAdapter.CustomerAllInterface {
 
-    private EditText editTextSearch;
-    private ImageView imageviewAdd;
-    private ImageView imageviewClose;
-    private RecyclerView recyclerView;
     private CustomerAdapter customerAdapter;
     private CustomerViewModel customerViewModel;
+    private ActivityListCustomerBinding listCustomerBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_customer);
-
-        editTextSearch = findViewById(R.id.search_edit_text);
-        imageviewAdd = findViewById(R.id.add_image_view);
-        imageviewClose = findViewById(R.id.close_image_view);
-        recyclerView = findViewById(R.id.customer_recycler_view);
+        listCustomerBinding = ActivityListCustomerBinding.inflate(getLayoutInflater());
+        setContentView(listCustomerBinding.getRoot());
 
         customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
 
         customerAdapter = new CustomerAdapter(customerViewModel.getCustomerList().getValue(), this);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(customerAdapter);
-
+        listCustomerBinding.customerRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        listCustomerBinding.customerRecyclerView.setAdapter(customerAdapter);
 
         customerViewModel.getCustomerList().observe(this, new Observer<List<Customer>>() {
             @Override
@@ -51,8 +45,15 @@ public class ListCustomerActivity extends BaseActivity implements CustomerAdapte
             }
         });
 
+        customerAdapter.setOnItemClickListener(new CustomerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Customer customer) {
+                startActivity(new Intent(ListCustomerActivity.this, InforCustomerActivity.class));
+            }
+        });
 
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+
+        listCustomerBinding.searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -65,16 +66,16 @@ public class ListCustomerActivity extends BaseActivity implements CustomerAdapte
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
-                    imageviewAdd.setVisibility(View.GONE);
-                    imageviewClose.setVisibility(View.VISIBLE);
+                    listCustomerBinding.addImageView.setVisibility(View.GONE);
+                    listCustomerBinding.closeImageView.setVisibility(View.VISIBLE);
                 } else {
-                    imageviewAdd.setVisibility(View.VISIBLE);
-                    imageviewClose.setVisibility(View.GONE);
+                    listCustomerBinding.addImageView.setVisibility(View.VISIBLE);
+                    listCustomerBinding.closeImageView.setVisibility(View.GONE);
                 }
             }
         });
 
-        editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        listCustomerBinding.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -88,20 +89,20 @@ public class ListCustomerActivity extends BaseActivity implements CustomerAdapte
             }
         });
 
-        imageviewAdd.setOnClickListener(new View.OnClickListener() {
+        listCustomerBinding.addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ListCustomerActivity.this, InforCustomerActivity.class));
             }
         });
 
-        imageviewClose.setOnClickListener(new View.OnClickListener() {
+        listCustomerBinding.closeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editTextSearch.setText("");
+                listCustomerBinding.searchEditText.setText("");
                 customerAdapter.getFilter().filter("");
-                imageviewAdd.setVisibility(View.VISIBLE);
-                imageviewClose.setVisibility(View.GONE);
+                listCustomerBinding.addImageView.setVisibility(View.VISIBLE);
+                listCustomerBinding.closeImageView.setVisibility(View.GONE);
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.thd.danhtran12797.moapp;
+package com.thd.danhtran12797.moapp.models;
 
 
 import androidx.annotation.NonNull;
