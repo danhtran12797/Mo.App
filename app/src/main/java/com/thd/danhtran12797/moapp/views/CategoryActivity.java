@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,10 +28,7 @@ import com.thd.danhtran12797.moapp.models.Category;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.ACTIVITY_REQUEST;
@@ -43,7 +38,7 @@ import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_PRODUCT_ID;
 
-public class CategoryActivity extends AppCompatActivity implements ProductAdapter.ProductInterface {
+public class CategoryActivity extends BaseActivity implements ProductAdapter.ProductInterface {
 
     public static final String PRODUCT_URL = "https://firebasestorage.googleapis.com/v0/b/appmusicfrist.appspot.com/o/image_app%2Fimg_vn%2Fimage_product.jpg?alt=media&token=352d0ad5-ae56-4a2d-b568-afb1bc30ee7a";
 
@@ -104,6 +99,10 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
                     public void onChanged(List<Product> products) {
                         categoryBinding.setIsLoading(false);
                         productAdapter.submitList(products);
+                        if(products.size()!=0)
+                            categoryBinding.emptyProductLayout.setVisibility(View.GONE);
+                        else
+                            categoryBinding.emptyProductLayout.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -111,10 +110,15 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
 
     }
 
-    public void openActivityAddProduct(){
-        Intent intent = new Intent(CategoryActivity.this, DetailProductActivity.class);
+    public void openActivityAddProduct() {
+        Intent intent = new Intent(CategoryActivity.this, ProductDetailActivity.class);
         intent.putExtra(KEY_CATEGORY_ID, category.getId());
         startActivityForResult(intent, ACTIVITY_REQUEST);
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBack();
     }
 
     public void onBack() {
@@ -124,8 +128,8 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
         finish();
     }
 
-    public void showDeleteCategoryDialog(){
-        MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(this);
+    public void showDeleteCategoryDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Xóa danh mục");
         builder.setMessage("Bạn có đồng ý xóa danh mục?");
         builder.setIcon(R.drawable.ic_baseline_warning);
@@ -139,10 +143,10 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
                         if (s != null) {
                             if (s.equals("success")) {
                                 Toast.makeText(CategoryActivity.this, "Xóa danh mục thành công", Toast.LENGTH_SHORT).show();
-                                isDataChange=true;
+                                isDataChange = true;
                                 onBack();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(CategoryActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -176,9 +180,7 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(CategoryActivity.this);
+                 checkPermission(CategoryActivity.this);
             }
         });
 
@@ -198,8 +200,8 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
                     editCategoryCustomBinding.negativeButton.setEnabled(false);
                     editCategoryCustomBinding.positiveButton.setEnabled(false);
                     if (imageUri != null) {
-                        File file = new File(imageUri.getPath());
-                        categoryViewModel.uploadImage(file, "cate").observe(CategoryActivity.this, new Observer<String>() {
+//                        File file = new File(imageUri.getPath());
+                        categoryViewModel.uploadImage(imageUri, "cate").observe(CategoryActivity.this, new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
                                 if (s != null) {
@@ -242,44 +244,6 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
         });
     }
 
-    private void dummyData() {
-        lstProduct = new ArrayList<>();
-
-        String spec = "Tên SP: Băng keo trong - 50 mic\n" +
-                "Qui cách: 4F8* 100Y (90 mét)\n" +
-                "Đơn vị tính: Cuộn\n" +
-                "Chất liệu: OPP\n" +
-                "Chiều rộng: 10- 288mm\n" +
-                "Chiều dài:  35- 1000m\n" +
-                "Độ dày: 35- 65mic\n" +
-                "Màu sắc: Trong sutts, nâu, màu\n" +
-                "Chịu lực: >=24N/10mm\n" +
-                "Lực bám dính:>=4N/100mm\n" +
-                "Độ  giãn: 162%\n" +
-                "Đặc điểm: Không thấm nức\n" +
-                "Giá: 6000 đ\n" +
-                "Hạn sử dụng:12/2025";
-        Product product = new Product("Băng keo trong - 50 mic", "4F8* 100Y (90 mét)", PRODUCT_URL);
-
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-        lstProduct.add(product);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -308,7 +272,7 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                Toast.makeText(this, "Hello Search", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SearchProductActivity.class));
                 break;
             case R.id.menu_add_product:
                 openActivityAddProduct();
@@ -325,9 +289,8 @@ public class CategoryActivity extends AppCompatActivity implements ProductAdapte
 
     @Override
     public void onItemClick(Product product) {
-        Intent intent = new Intent(this, DetailProductActivity.class);
+        Intent intent = new Intent(this, ProductDetailActivity.class);
         intent.putExtra(KEY_PRODUCT_ID, product.getId());
-        intent.putExtra(KEY_CATEGORY_ID, category.getId());
         startActivityForResult(intent, ACTIVITY_REQUEST);
     }
 

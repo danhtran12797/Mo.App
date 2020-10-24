@@ -13,6 +13,11 @@ import com.thd.danhtran12797.moapp.databinding.ProductRowBinding;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.utils.ScreenUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductViewHolder> {
 
     private LayoutInflater layoutInflater;
@@ -41,6 +46,17 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductAdapter.ProductViewHolder holder, int position) {
         holder.bind(getItem(position));
         Log.d("BBB", "onBindViewHolder: ");
+    }
+
+    public void addAll(List<Product> lstProduct) {
+        ArrayList<Product> arrProduct=new ArrayList<>(getCurrentList());
+        arrProduct.addAll(lstProduct);
+        submitList(arrProduct);
+    }
+
+    public void resetListProduct() {
+        List<Product> lst = new ArrayList<>();
+        submitList(lst);
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {

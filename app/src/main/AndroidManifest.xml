@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thd.danhtran12797.moapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -18,21 +17,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
-        <activity android:name=".views.DetailProductActivity"
+        <activity android:name=".views.SearchProductActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".views.InforCustomerActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".views.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".views.ListCustomerActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".views.CategoryActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".views.GroupDetailActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".views.GroupActivity"
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".views.ProductDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.InforCustomerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.ListCustomerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.CategoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.GroupDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.GroupActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

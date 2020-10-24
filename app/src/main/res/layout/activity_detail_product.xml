@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:scrollbars="none"
-        tools:context=".views.DetailProductActivity">
+        tools:context=".views.ProductDetailActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -100,7 +100,7 @@
 
                     <EditText
                         android:id="@+id/nameEditText"
-                        android:focusable="false"
+                        android:inputType="text"
                         android:text="@{product.name}"
                         android:hint="Nhập tên sản phẩm"
                         android:layout_width="match_parent"
@@ -124,6 +124,7 @@
 
                     <EditText
                         android:id="@+id/specEditText"
+                        android:inputType="text"
                         android:text="@{product.spec}"
                         android:hint="Nhập quy cách"
                         android:layout_width="match_parent"
@@ -147,6 +148,7 @@
 
                     <EditText
                         android:id="@+id/unitEditText"
+                        android:inputType="text"
                         android:text="@{product.unit}"
                         android:hint="Nhập đơn vị"
                         android:layout_width="match_parent"
@@ -170,6 +172,7 @@
 
                     <EditText
                         android:id="@+id/materialEditText"
+                        android:inputType="text"
                         android:text="@{product.material}"
                         android:hint="Nhập chất liệu"
                         android:layout_width="match_parent"
@@ -193,6 +196,7 @@
 
                     <EditText
                         android:id="@+id/widthEditText"
+                        android:inputType="text"
                         android:text="@{product.width}"
                         android:hint="Nhập chiều rộng"
                         android:layout_width="match_parent"
@@ -216,6 +220,7 @@
 
                     <EditText
                         android:id="@+id/lengthEditText"
+                        android:inputType="text"
                         android:text="@{product.length}"
                         android:hint="Nhập chiều dài"
                         android:layout_width="match_parent"
@@ -239,6 +244,7 @@
 
                     <EditText
                         android:id="@+id/thicknessEditText"
+                        android:inputType="text"
                         android:text="@{product.thickness}"
                         android:hint="Nhập độ dày"
                         android:layout_width="match_parent"
@@ -262,6 +268,7 @@
 
                     <EditText
                         android:id="@+id/colorEditText"
+                        android:inputType="text"
                         android:text="@{product.color}"
                         android:hint="Nhập màu sắc"
                         android:layout_width="match_parent"
@@ -285,6 +292,7 @@
 
                     <EditText
                         android:id="@+id/powerEditText"
+                        android:inputType="text"
                         android:text="@{product.bearing}"
                         android:hint="Nhập chịu lực"
                         android:layout_width="match_parent"
@@ -308,6 +316,7 @@
 
                     <EditText
                         android:id="@+id/adhForceEditText"
+                        android:inputType="text"
                         android:text="@{product.adh_force}"
                         android:hint="Nhập lực bám dính"
                         android:layout_width="match_parent"
@@ -331,6 +340,7 @@
 
                     <EditText
                         android:id="@+id/elasEditText"
+                        android:inputType="text"
                         android:text="@{product.elas}"
                         android:hint="Nhập độ giãn"
                         android:layout_width="match_parent"
@@ -354,6 +364,7 @@
 
                     <EditText
                         android:id="@+id/characEditText"
+                        android:inputType="text"
                         android:text="@{product.charac}"
                         android:hint="Nhập đặc điểm"
                         android:layout_width="match_parent"
@@ -377,6 +388,7 @@
 
                     <EditText
                         android:id="@+id/priceEditText"
+                        android:inputType="text"
                         android:text='@{product.price}'
                         android:hint="Nhập giá sản phẩm"
                         android:layout_width="match_parent"
@@ -400,6 +412,7 @@
 
                     <EditText
                         android:id="@+id/expDateEditText"
+                        android:inputType="text"
                         android:text="@{product.exp_date}"
                         android:hint="Nhập hạn sử dụng"
                         android:layout_width="match_parent"

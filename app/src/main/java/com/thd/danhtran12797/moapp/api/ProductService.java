@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_ADDRESS_URL;
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_PRO_URL;
@@ -39,6 +40,7 @@ public class ProductService {
                     .baseUrl(BASE_PRO_URL)
 //                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson));
+//                    .addConverterFactory(ScalarsConverterFactory.create());
 
     private static Retrofit retrofit = retrofitBuilder.build();
 

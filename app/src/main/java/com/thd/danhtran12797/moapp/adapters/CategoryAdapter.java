@@ -22,7 +22,7 @@ public class CategoryAdapter extends ListAdapter<Category, RecyclerView.ViewHold
     private CategoryInterface categoryInterface;
     private String groupId;
 
-    public void setGroupId(String groupId){
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
@@ -55,67 +55,68 @@ public class CategoryAdapter extends ListAdapter<Category, RecyclerView.ViewHold
         }
     }
 
-        @Override
-        public void onBindViewHolder (@NonNull RecyclerView.ViewHolder viewHolder, int position){
-            if (getItemViewType(position) != ADD_CATE_TYPE){
-                ((CategoryViewHolder)viewHolder).bind(getItem(position));
-            }
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        if (getItemViewType(position) != ADD_CATE_TYPE) {
+            ((CategoryViewHolder) viewHolder).bind(getItem(position));
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (getItem(position).isAddCate())
+            return ADD_CATE_TYPE;
+        return CATEGORY_TYPE;
+    }
+
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
+
+        CategoryRowBinding categoryRowBinding;
+
+        public CategoryViewHolder(CategoryRowBinding categoryRowBinding) {
+            super(categoryRowBinding.getRoot());
+
+            this.categoryRowBinding = categoryRowBinding;
+
+            int size = ScreenUtils.getInstance().getWidth() / 3;
+            itemView.setLayoutParams(new CardView.LayoutParams(size, size));
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    categoryInterface.onItemClick(getItem(getAdapterPosition()), groupId);
+                }
+            });
         }
 
-        @Override
-        public int getItemViewType ( int position){
-            if (getItem(position).isAddCate())
-                return ADD_CATE_TYPE;
-            return CATEGORY_TYPE;
+        public void bind(Category category) {
+            categoryRowBinding.setCategory(category);
         }
+    }
 
-        public class CategoryViewHolder extends RecyclerView.ViewHolder {
+    public class AddCateViewModel extends RecyclerView.ViewHolder {
+        AddCategoryRowBinding addCategoryRowBinding;
 
-            CategoryRowBinding categoryRowBinding;
-
-            public CategoryViewHolder(CategoryRowBinding categoryRowBinding) {
-                super(categoryRowBinding.getRoot());
-
-                this.categoryRowBinding = categoryRowBinding;
-
-                int size = ScreenUtils.getInstance().getWidth() / 3;
-                itemView.setLayoutParams(new CardView.LayoutParams(size, size));
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        categoryInterface.onItemClick(getItem(getAdapterPosition()), groupId);
-                    }
-                });
-            }
-
-            public void bind(Category category) {
-                categoryRowBinding.setCategory(category);
-            }
-        }
-
-        public class AddCateViewModel extends RecyclerView.ViewHolder {
-            AddCategoryRowBinding addCategoryRowBinding;
-
-            public AddCateViewModel(AddCategoryRowBinding addCategoryRowBinding) {
-                super(addCategoryRowBinding.getRoot());
-                this.addCategoryRowBinding = addCategoryRowBinding;
+        public AddCateViewModel(AddCategoryRowBinding addCategoryRowBinding) {
+            super(addCategoryRowBinding.getRoot());
+            this.addCategoryRowBinding = addCategoryRowBinding;
 
 //                int size = ScreenUtils.getInstance().getWidth() / 3;
 //                itemView.setLayoutParams(new CardView.LayoutParams(size, size));
 
-                addCategoryRowBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        categoryInterface.onAddItemClick(groupId);
-                    }
-                });
-            }
+            addCategoryRowBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    categoryInterface.onAddItemClick(groupId);
+                }
+            });
         }
-
-        public interface CategoryInterface {
-            void onItemClick(Category category, String groupId);
-            void onAddItemClick(String groupId);
-        }
-
     }
+
+    public interface CategoryInterface {
+        void onItemClick(Category category, String groupId);
+
+        void onAddItemClick(String groupId);
+    }
+
+}

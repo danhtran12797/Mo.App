@@ -1,11 +1,17 @@
 package com.thd.danhtran12797.moapp.utils;
 
 public class Constants {
-    // 192.168.42.101
-    public static final String BASE_PRO_URL = "http://192.168.42.101/moapp/";
-    public static final String BASE_IMAGE_CATE_URL = "http://192.168.42.101/moapp/image/categories/";
-    public static final String BASE_IMAGE_PRO_URL = "http://192.168.42.101/moapp/image/product/";
+
+    // 192.168.0.160
+    public static final String BASE_PRO_URL = "http://192.168.42.105/moapp/";
+    public static final String BASE_IMAGE_CATE_URL = "http://192.168.42.105/moapp/image/categories/";
+    public static final String BASE_IMAGE_PRO_URL = "http://192.168.42.105/moapp/image/product/";
     public static final String BASE_ADDRESS_URL = "";
+
+//    public static final String BASE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/";
+//    public static final String BASE_IMAGE_CATE_URL = "https://danhtran12797.000webhostapp.com/moapp/image/categories/";
+//    public static final String BASE_IMAGE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/image/product/";
+//    public static final String BASE_ADDRESS_URL = "";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
     public static final int READ_TIMEOUT = 2; // 2 seconds
@@ -20,5 +26,6 @@ public class Constants {
     public static final String DATA_CHANGE = "data change";
 //    public static final String KEY_GROUP = "key group";
 
-    public static final int ACTIVITY_REQUEST=1;
+    public static final int ACTIVITY_REQUEST = 1;
+    public static final int REQUEST_CODE_SEARCH_VOICE = 2;
 }

@@ -1,6 +1,5 @@
 package com.thd.danhtran12797.moapp.models;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import com.thd.danhtran12797.moapp.R;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-import static com.thd.danhtran12797.moapp.utils.Constants.BASE_IMAGE_CATE_URL;
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_IMAGE_PRO_URL;
 
 public class Product implements Serializable {
@@ -224,14 +221,14 @@ public class Product implements Serializable {
     }
 
     @BindingAdapter("android:productImage")
-    public static void loadImage(ImageView imageView, String imageUrl){
-        if(imageUrl==null)
+    public static void loadImage(ImageView imageView, String imageUrl) {
+        if (imageUrl == null)
             return;
         Glide.with(imageView)
-                .load(BASE_IMAGE_PRO_URL+imageUrl)
+                .load(BASE_IMAGE_PRO_URL + imageUrl)
                 .placeholder(R.drawable.default_placeholder_image)
                 .error(R.drawable.error_image)
-                .fitCenter()
+                .centerInside()
                 .into(imageView);
     }
 
@@ -241,18 +238,8 @@ public class Product implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return name.equals(product.name) &&
-                image.equals(product.image)&&
-                spec.equals(product.spec) &&
-                price.equals(product.price) &&
-                material.equals(product.material) &&
-                width.equals(product.width) &&
-                length.equals(product.length) &&
-                color.equals(product.color) &&
-                adh_force.equals(product.adh_force) &&
-                elas.equals(product.elas) &&
-                charac.equals(product.charac)&&
-                unit.equals(product.unit)&&
-                bearing.equals(product.bearing);
+                image.equals(product.image) &&
+                spec.equals(product.spec);
     }
 
 //    @Override
@@ -260,7 +247,7 @@ public class Product implements Serializable {
 //        return Objects.hash(id, name, spec, image, price, quantity, material, width, length, color, adh_force, elas, charac, exp_date);
 //    }
 
-    public static DiffUtil.ItemCallback<Product> itemCallback=new DiffUtil.ItemCallback<Product>() {
+    public static DiffUtil.ItemCallback<Product> itemCallback = new DiffUtil.ItemCallback<Product>() {
         @Override
         public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
             return oldItem.getId().equals(newItem.getId());

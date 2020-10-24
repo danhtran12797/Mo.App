@@ -26,11 +26,11 @@ public class GroupDetailViewModel extends ViewModel {
         isChangeData.setValue(!isChangeData.getValue());
     }
 
-    public LiveData<List<Category>> getCategories(String groupId){
+    public LiveData<List<Category>> getCategories(String groupId) {
         return groupDetailRepository.getCategories(groupId);
     }
 
-    public LiveData<String> updateGroup(String idGroup, String nameGroup){
+    public LiveData<String> updateGroup(String idGroup, String nameGroup) {
         return groupDetailRepository.updateGroup(idGroup, nameGroup);
     }
 

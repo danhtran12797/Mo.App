@@ -78,5 +78,11 @@ public interface ProductApi {
     @FormUrlEncoded
     @POST("DeleteProduct.php")
     Call<String> DeleteProduct(@Field("id_pro") String id_pro);
+
+    @GET("GetTotalPage.php")
+    Call<String> GetTotalPage(@Query("search_name") String search_name);
+
+    @GET("GetProductFromSearch.php")
+    Call<List<Product>> GetProductFromSearch(@Query("search_name") String search_name, @Query("view_type") int view_type, @Query("page") int page);
 }
 

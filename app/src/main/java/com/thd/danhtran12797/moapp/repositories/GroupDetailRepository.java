@@ -18,12 +18,12 @@ import retrofit2.Response;
 public class GroupDetailRepository {
     private ProductApi productApi;
 
-    public GroupDetailRepository(){
+    public GroupDetailRepository() {
         productApi = ProductService.getProductApi();
     }
 
-    public LiveData<List<Category>> getCategories(String id){
-        MutableLiveData<List<Category>> cateMutableLiveData=new MutableLiveData<>();
+    public LiveData<List<Category>> getCategories(String id) {
+        MutableLiveData<List<Category>> cateMutableLiveData = new MutableLiveData<>();
         productApi.GetGroupDetail(id).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
@@ -38,7 +38,7 @@ public class GroupDetailRepository {
         return cateMutableLiveData;
     }
 
-    public LiveData<String> updateGroup(String idGroup, String nameGroup){
+    public LiveData<String> updateGroup(String idGroup, String nameGroup) {
         MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
         productApi.UpdateGroup(idGroup, nameGroup).enqueue(new Callback<String>() {
             @Override
@@ -48,14 +48,14 @@ public class GroupDetailRepository {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("AAA", "onFailure: "+t.getMessage());
+                Log.d("AAA", "onFailure: " + t.getMessage());
                 mutableLiveData.setValue(null);
             }
         });
         return mutableLiveData;
     }
 
-    public LiveData<String> deleteGroup(String idGroup){
+    public LiveData<String> deleteGroup(String idGroup) {
         MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
         productApi.DeleteGroup(idGroup).enqueue(new Callback<String>() {
             @Override
@@ -65,7 +65,7 @@ public class GroupDetailRepository {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("AAA", "onFailure: "+t.getMessage());
+                Log.d("AAA", "onFailure: " + t.getMessage());
                 mutableLiveData.setValue(null);
             }
         });

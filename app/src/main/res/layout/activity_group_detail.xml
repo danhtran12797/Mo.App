@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="isLoading"
             type="Boolean" />
@@ -16,14 +17,14 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/groupDetailAppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:backgroundTint="@color/white"
-            app:liftOnScroll="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/groupDetailToolbar"
@@ -43,6 +44,33 @@
             app:layout_constraintTop_toBottomOf="@+id/groupDetailAppBarLayout"
             app:spanCount="3" />
 
+        <LinearLayout
+            android:id="@+id/emptyCateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/backgroundGroupDetail"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groupDetailAppBarLayout">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:src="@drawable/empty_box"
+                app:tint="#ccc" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Danh mục trống"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#ccc" />
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -53,21 +81,21 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/addCategoryFloating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
                 android:src="@drawable/ic_add_group"
                 app:backgroundTint="@color/white"
                 app:borderWidth="2dp"
-                app:rippleColor="@color/colorPrimaryDark"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                app:rippleColor="@color/colorPrimaryDark" />
 
             <ProgressBar
                 style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=gone}" />
         </RelativeLayout>
 

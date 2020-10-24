@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,15 +21,12 @@ import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.thd.danhtran12797.moapp.viewmodels.ProductViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.io.File;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.DATA_CHANGE;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_PRODUCT_ID;
 
-public class DetailProductActivity extends AppCompatActivity {
+public class ProductDetailActivity extends BaseActivity {
 
     private static final String TAG = "DetailProductActivity";
 
@@ -65,9 +61,7 @@ public class DetailProductActivity extends AppCompatActivity {
         detailProductBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(DetailProductActivity.this);
+                checkPermission(ProductDetailActivity.this);
             }
         });
 
@@ -95,7 +89,7 @@ public class DetailProductActivity extends AppCompatActivity {
                     if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
                         if (imageUri != null) {
                             uploadImage();
-                        }else{
+                        } else {
                             updateProduct(productMain.getImage());
                         }
                     } else {
@@ -103,11 +97,11 @@ public class DetailProductActivity extends AppCompatActivity {
                             uploadImage();
                         } else {
                             detailProductBinding.setIsLoading(false);
-                            Toast.makeText(DetailProductActivity.this, "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailActivity.this, "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
-                    Toast.makeText(DetailProductActivity.this, "Vui lòng nhập dữ liệu!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailActivity.this, "Vui lòng nhập dữ liệu!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -115,7 +109,6 @@ public class DetailProductActivity extends AppCompatActivity {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
             productId = getIntent().getStringExtra(KEY_PRODUCT_ID);
-            categoryId = getIntent().getStringExtra(KEY_CATEGORY_ID);
             productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
             detailProductBinding.setIsLoading(true);
             productViewModel.getProduct(productId).observe(this, new Observer<Product>() {
@@ -128,15 +121,15 @@ public class DetailProductActivity extends AppCompatActivity {
             });
             setFocusableView(false);
         } else {
-            categoryId=getIntent().getStringExtra(KEY_CATEGORY_ID);
+            categoryId = getIntent().getStringExtra(KEY_CATEGORY_ID);
             setFocusableView(true);
             invalidateOptionsMenu();
             hideMenu = true;
         }
     }
 
-    public void showDeleteProductDialog(){
-        MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(this);
+    public void showDeleteProductDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Xóa sản phẩm");
         builder.setMessage("Bạn có đồng ý xóa sản phẩm?");
         builder.setIcon(R.drawable.ic_baseline_warning);
@@ -144,17 +137,17 @@ public class DetailProductActivity extends AppCompatActivity {
         builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                productViewModel.deleteProduct(productId).observe(DetailProductActivity.this, new Observer<String>() {
+                productViewModel.deleteProduct(productId).observe(ProductDetailActivity.this, new Observer<String>() {
                     @Override
                     public void onChanged(String s) {
                         if (s != null) {
                             if (s.equals("success")) {
-                                Toast.makeText(DetailProductActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                                isDataChange=true;
+                                Toast.makeText(ProductDetailActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                                isDataChange = true;
                                 onBack();
                             }
-                        }else{
-                            Toast.makeText(DetailProductActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProductDetailActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -170,29 +163,24 @@ public class DetailProductActivity extends AppCompatActivity {
     }
 
     public void uploadImage() {
-        File file = new File(imageUri.getPath());
-        categoryViewModel.uploadImage(file, "pro").observe(DetailProductActivity.this, new Observer<String>() {
+//        File file = new File(imageUri.getPath());
+        categoryViewModel.uploadImage(imageUri, "pro").observe(ProductDetailActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null) {
                     if (!s.equals("failed")) {
-                        if(getIntent().hasExtra(KEY_PRODUCT_ID))
+                        if (getIntent().hasExtra(KEY_PRODUCT_ID))
                             updateProduct(s);
                         else
                             insertProduct(s);
                     }
                 } else {
                     detailProductBinding.setIsLoading(false);
-                    Toast.makeText(DetailProductActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-    // String name_pro, String image_pro, String price,
-    //                              String spec, String material, String thickness,
-    //                              String width, String length, String color, String adh_force, String elas,
-    //                              String charac, String unit, String bearing, String exp_date
 
     public void insertProduct(String image_pro) {
         categoryViewModel.insertProduct(categoryId, name_pro, image_pro, price, "1",
@@ -200,14 +188,13 @@ public class DetailProductActivity extends AppCompatActivity {
                 color, adh_force, elas, charac, unit, bearing, exp_date).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if(s.equals("success")){
-                    Toast.makeText(DetailProductActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                    isDataChange=true;
+                if (s.equals("success")) {
+                    Toast.makeText(ProductDetailActivity.this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                    isDataChange = true;
                     onBack();
                 }
             }
         });
-
     }
 
     public void updateProduct(String image_pro) {
@@ -216,15 +203,14 @@ public class DetailProductActivity extends AppCompatActivity {
                 charac, unit, bearing, exp_date).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if(s.equals("success")){
+                if (s.equals("success")) {
                     detailProductBinding.setIsLoading(false);
-                    Toast.makeText(DetailProductActivity.this, "Cập nhật sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailActivity.this, "Cập nhật sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     setFocusableView(false);
-                    isDataChange=true;
+                    isDataChange = true;
                 }
             }
         });
-
     }
 
     public boolean checkValidate(String name_pro, String price,
@@ -276,6 +262,11 @@ public class DetailProductActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBack();
     }
 
     private void onBack() {
@@ -336,7 +327,7 @@ public class DetailProductActivity extends AppCompatActivity {
                 detailProductBinding.imageProduct.setImageURI(imageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                Log.d(TAG, "onActivityResult: "+error.getMessage());
+                Log.d(TAG, "onActivityResult: " + error.getMessage());
             }
         }
     }

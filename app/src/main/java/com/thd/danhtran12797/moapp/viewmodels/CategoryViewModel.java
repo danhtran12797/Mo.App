@@ -1,5 +1,7 @@
 package com.thd.danhtran12797.moapp.viewmodels;
 
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +17,7 @@ public class CategoryViewModel extends ViewModel {
     private CategoryRepository categoryRepository;
     private MutableLiveData<Boolean> isChangeData = new MutableLiveData<>();
 
-    public CategoryViewModel(){
+    public CategoryViewModel() {
         categoryRepository = new CategoryRepository();
         isChangeData.setValue(false);
     }
@@ -28,33 +30,40 @@ public class CategoryViewModel extends ViewModel {
         isChangeData.setValue(!isChangeData.getValue());
     }
 
-    public LiveData<List<Product>> getProducts(String categoryId){
+    public LiveData<List<Product>> getProducts(String categoryId) {
         return categoryRepository.getProducts(categoryId);
     }
 
-    public LiveData<String> uploadImage(File file, String to){
-        return categoryRepository.uploadImage(file, to);
+    public LiveData<String> uploadImage(Uri uri, String to) {
+        return categoryRepository.uploadImage(uri, to);
     }
 
-    public LiveData<String> insertCategory(String groupId, String nameCate, String imageCate){
+    public LiveData<String> insertCategory(String groupId, String nameCate, String imageCate) {
         return categoryRepository.insertCategory(groupId, nameCate, imageCate);
     }
 
-    public LiveData<String> updateCategory(String id, String nameCate, String imageCate){
+    public LiveData<String> updateCategory(String id, String nameCate, String imageCate) {
         return categoryRepository.updateCategory(id, nameCate, imageCate);
     }
 
-    public LiveData<String> deleteCategory(String categoryId){
+    public LiveData<String> deleteCategory(String categoryId) {
         return categoryRepository.deleteCategory(categoryId);
     }
 
     public LiveData<String> insertProduct(String id_cate, String name_pro, String image_pro, String price,
                                           String quantity, String spec, String material, String thickness,
                                           String width, String length, String color, String adh_force, String elas,
-                                          String charac, String unit, String bearing, String exp_date){
+                                          String charac, String unit, String bearing, String exp_date) {
 
         return categoryRepository.insertProduct(id_cate, name_pro, image_pro, price, quantity, spec,
                 material, thickness, width, length, color, adh_force, elas, charac, unit, bearing, exp_date);
     }
 
+    public LiveData<String> getTotalPage(String search_name){
+        return categoryRepository.getTotalPage(search_name);
+    }
+
+    public LiveData<List<Product>> getProductFromSearch(String search_name, int view_type, int page) {
+        return categoryRepository.getProductFromSearch(search_name, view_type, page);
+    }
 }

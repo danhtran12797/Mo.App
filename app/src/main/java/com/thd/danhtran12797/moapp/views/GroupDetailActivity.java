@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,22 +29,16 @@ import com.thd.danhtran12797.moapp.models.Category;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.thd.danhtran12797.moapp.viewmodels.GroupDetailViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.ACTIVITY_REQUEST;
 import static com.thd.danhtran12797.moapp.utils.Constants.DATA_CHANGE;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_NAME;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_NAME;
-import static com.thd.danhtran12797.moapp.views.GroupActivity.IMAGE_URL;
 
-public class GroupDetailActivity extends AppCompatActivity implements CategoryAdapter.CategoryInterface {
+public class GroupDetailActivity extends BaseActivity implements CategoryAdapter.CategoryInterface {
 
     private static final String TAG = "GroupDetailActivity";
 
@@ -54,25 +47,25 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
     private GroupDetailViewModel groupDetailViewModel;
     private String group_id, group_name;
 
-    private Uri imageUri=null;
+    private Uri imageUri = null;
     private EditCategoryCustomBinding editCategoryCustomBinding;
     private EditGroupCustomBinding editGroupCustomBinding;
     private CategoryViewModel categoryViewModel;
 
-    private boolean isDataChange=false;
+    private boolean isDataChange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        groupDetailBinding=ActivityGroupDetailBinding.inflate(getLayoutInflater());
+        groupDetailBinding = ActivityGroupDetailBinding.inflate(getLayoutInflater());
         setContentView(groupDetailBinding.getRoot());
 
         setSupportActionBar(groupDetailBinding.groupDetailToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent()!=null){
-            group_id=getIntent().getStringExtra(KEY_GROUP_ID);
-            group_name=getIntent().getStringExtra(KEY_GROUP_NAME);
+        if (getIntent() != null) {
+            group_id = getIntent().getStringExtra(KEY_GROUP_ID);
+            group_name = getIntent().getStringExtra(KEY_GROUP_NAME);
             getSupportActionBar().setTitle(group_name);
         }
 
@@ -90,7 +83,7 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
             }
         });
 
-        categoryAdapter=new CategoryAdapter(this);
+        categoryAdapter = new CategoryAdapter(this);
         groupDetailBinding.groupDetailRecyclerView.setAdapter(categoryAdapter);
 
         groupDetailViewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
@@ -103,6 +96,10 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
                     public void onChanged(List<Category> categories) {
                         groupDetailBinding.setIsLoading(false);
                         categoryAdapter.submitList(categories);
+                        if (categories.size() != 0)
+                            groupDetailBinding.emptyCateLayout.setVisibility(View.GONE);
+                        else
+                            groupDetailBinding.emptyCateLayout.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -111,15 +108,20 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
     }
 
-    public void onBack(){
-        Intent intent=new Intent();
+    @Override
+    public void onBackPressed() {
+        onBack();
+    }
+
+    public void onBack() {
+        Intent intent = new Intent();
         intent.putExtra(DATA_CHANGE, isDataChange);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-    public void showDeleteGroupDialog(){
-        MaterialAlertDialogBuilder builder=new MaterialAlertDialogBuilder(this);
+    public void showDeleteGroupDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Xóa nhóm");
         builder.setMessage("Bạn có đồng ý xóa nhóm?");
         builder.setIcon(R.drawable.ic_baseline_warning);
@@ -133,10 +135,10 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
                         if (s != null) {
                             if (s.equals("success")) {
                                 Toast.makeText(GroupDetailActivity.this, "Xóa nhóm thành công", Toast.LENGTH_SHORT).show();
-                                isDataChange=true;
+                                isDataChange = true;
                                 onBack();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(GroupDetailActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -153,8 +155,8 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
     }
 
     public void showEditGroupDialog() {
-        if(editGroupCustomBinding!=null)
-            editGroupCustomBinding=null;
+        if (editGroupCustomBinding != null)
+            editGroupCustomBinding = null;
 
         Dialog dialogs = new Dialog(this);
         editGroupCustomBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.edit_group_custom, null, false);
@@ -176,7 +178,7 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
         editGroupCustomBinding.positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameGroup=editGroupCustomBinding.nameGroupTextView.getText().toString();
+                String nameGroup = editGroupCustomBinding.nameGroupTextView.getText().toString();
                 if (!nameGroup.matches("")) {
                     editGroupCustomBinding.negativeButton.setEnabled(false);
                     editGroupCustomBinding.positiveButton.setEnabled(false);
@@ -187,14 +189,14 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
                             editGroupCustomBinding.negativeButton.setEnabled(true);
                             editGroupCustomBinding.positiveButton.setEnabled(true);
                             editGroupCustomBinding.setIsLoading(false);
-                            if(s!=null){
-                                if(s.equals("success")){
+                            if (s != null) {
+                                if (s.equals("success")) {
                                     Toast.makeText(GroupDetailActivity.this, "Cập nhật nhóm thành công", Toast.LENGTH_SHORT).show();
                                     dialogs.dismiss();
                                     getSupportActionBar().setTitle(nameGroup);
-                                    isDataChange=true;
+                                    isDataChange = true;
                                 }
-                            }else{
+                            } else {
                                 dialogs.dismiss();
                                 Toast.makeText(GroupDetailActivity.this, "Vui lòng kiểm tra Internet", Toast.LENGTH_SHORT).show();
                             }
@@ -207,10 +209,10 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
         });
     }
 
-    public void showAddCategoryDialog(String groupId){
+    public void showAddCategoryDialog(String groupId) {
         imageUri = null;
-        if(editCategoryCustomBinding!=null)
-            editCategoryCustomBinding=null;
+        if (editCategoryCustomBinding != null)
+            editCategoryCustomBinding = null;
 
         Dialog dialogs = new Dialog(this);
         editCategoryCustomBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.edit_category_custom, null, false);
@@ -222,9 +224,7 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(GroupDetailActivity.this);
+                checkPermission(GroupDetailActivity.this);
             }
         });
 
@@ -238,18 +238,18 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
         editCategoryCustomBinding.positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageUri!=null){
+                if (imageUri != null) {
                     String nameCate = editCategoryCustomBinding.nameCateTextView.getText().toString();
-                    if(!nameCate.matches("")){
+                    if (!nameCate.matches("")) {
                         editCategoryCustomBinding.setIsLoading(true);
                         editCategoryCustomBinding.negativeButton.setEnabled(false);
                         editCategoryCustomBinding.positiveButton.setEnabled(false);
-                        File file = new File(imageUri.getPath());
-                        categoryViewModel.uploadImage(file, "cate").observe(GroupDetailActivity.this, new Observer<String>() {
+//                        File file = new File(imageUri.getPath());
+                        categoryViewModel.uploadImage(imageUri, "cate").observe(GroupDetailActivity.this, new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
-                                if(s!=null){
-                                    if(!s.equals("failed")){
+                                if (s != null) {
+                                    if (!s.equals("failed")) {
                                         categoryViewModel.insertCategory(groupId, nameCate, s).observe(GroupDetailActivity.this, new Observer<String>() {
                                             @Override
                                             public void onChanged(String s) {
@@ -258,22 +258,25 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
                                                 editCategoryCustomBinding.positiveButton.setEnabled(true);
                                                 dialogs.dismiss();
                                                 if (s != null) {
-                                                    if(s.equals("success")){
+                                                    if (s.equals("success")) {
                                                         Toast.makeText(GroupDetailActivity.this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
-                                                        isDataChange=true;
+                                                        isDataChange = true;
                                                         groupDetailViewModel.setIsChangeData();
                                                     }
                                                 }
                                             }
                                         });
                                     }
+                                } else {
+                                    Toast.makeText(GroupDetailActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                                    dialogs.dismiss();
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         Toast.makeText(GroupDetailActivity.this, "Vui lòng nhập tên danh mục!", Toast.LENGTH_SHORT).show();
                     }
-                }else
+                } else
                     Toast.makeText(GroupDetailActivity.this, "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -289,51 +292,30 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
                 editCategoryCustomBinding.imageCategory.setImageURI(imageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                Log.d(TAG, "onActivityResult: "+error.getMessage());
+                Log.d(TAG, "onActivityResult: " + error.getMessage());
             }
-        }else if(requestCode==ACTIVITY_REQUEST&&resultCode==RESULT_OK&&data!=null){
-            boolean dataChane=data.getBooleanExtra(DATA_CHANGE, false);
-            Log.d(TAG, "onActivityResult: "+dataChane);
-            if(dataChane)
+        } else if (requestCode == ACTIVITY_REQUEST && resultCode == RESULT_OK && data != null) {
+            Log.d(TAG, "onActivityResult: " + isDataChange);
+            boolean check = data.getBooleanExtra(DATA_CHANGE, false);
+            if (check) {
+                isDataChange = check;
                 groupDetailViewModel.setIsChangeData();
+            }
+
         }
-    }
-
-    private void dummyData() {
-        List<Category> lstCate1= new ArrayList<>();
-
-        Category category = new Category("1", "BK trong", IMAGE_URL);
-        Category category1 = new Category("1", "BK điện nano", IMAGE_URL);
-        Category category2 = new Category("1", "BK giấy nhăn", IMAGE_URL);
-        Category category3 = new Category("1", "BK điện nano không màu", IMAGE_URL);
-        Category category4 = new Category("1", "BK đục", IMAGE_URL);
-        Category category5 = new Category("1", "BK trong", IMAGE_URL);
-        Category category6 = new Category("1", "BK trong", IMAGE_URL);
-        Category category7 = new Category("1", "BK không màu", IMAGE_URL);
-        Category category8 = new Category("1", "BK điện nano không màu", IMAGE_URL);
-
-        lstCate1.add(category1);
-        lstCate1.add(category);
-        lstCate1.add(category2);
-        lstCate1.add(category3);
-        lstCate1.add(category4);
-        lstCate1.add(category5);
-        lstCate1.add(category6);
-        lstCate1.add(category7);
-        lstCate1.add(category8);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.group_detail_menu,menu);
+        getMenuInflater().inflate(R.menu.group_detail_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_search:
-                Toast.makeText(this, "Hello Search", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SearchProductActivity.class));
                 break;
             case R.id.menu_add_category:
                 showAddCategoryDialog(group_id);
@@ -350,7 +332,7 @@ public class GroupDetailActivity extends AppCompatActivity implements CategoryAd
 
     @Override
     public void onItemClick(Category category, String groupId) {
-        Intent intent=new Intent(this, CategoryActivity.class);
+        Intent intent = new Intent(this, CategoryActivity.class);
         intent.putExtra(KEY_CATEGORY, category);
         intent.putExtra(KEY_GROUP_ID, group_id);
         startActivityForResult(intent, ACTIVITY_REQUEST);

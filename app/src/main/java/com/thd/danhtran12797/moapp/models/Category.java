@@ -1,6 +1,5 @@
 package com.thd.danhtran12797.moapp.models;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,7 @@ import java.io.Serializable;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_IMAGE_CATE_URL;
 
-public class Category implements Serializable{
+public class Category implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -38,8 +37,8 @@ public class Category implements Serializable{
         isAddCate = addCate;
     }
 
-    public Category(){
-        this.isAddCate=false;
+    public Category() {
+        this.isAddCate = false;
         this.id = "";
         this.name = "";
         this.image = "";
@@ -76,14 +75,14 @@ public class Category implements Serializable{
     }
 
     @BindingAdapter("android:categoryImage")
-    public static void loadImage(ImageView imageView, String imageUrl){
-        if(imageUrl==null)
+    public static void loadImage(ImageView imageView, String imageUrl) {
+        if (imageUrl == null)
             return;
         Glide.with(imageView)
-                .load(BASE_IMAGE_CATE_URL+imageUrl)
+                .load(BASE_IMAGE_CATE_URL + imageUrl)
                 .placeholder(R.drawable.default_placeholder_image)
                 .error(R.drawable.error_image)
-                .fitCenter()
+                .centerInside()
                 .into(imageView);
     }
 
@@ -92,10 +91,10 @@ public class Category implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-        return  id.equals(category.getId())&&
-                name.equals(category.getName())&&
-                image.equals(category.getImage())&&
-                isAddCate==category.isAddCate();
+        return id.equals(category.getId()) &&
+                name.equals(category.getName()) &&
+                image.equals(category.getImage()) &&
+                isAddCate == category.isAddCate();
     }
 
 //    @Override
@@ -103,7 +102,7 @@ public class Category implements Serializable{
 //        return Objects.hash(id, name, image);
 //    }
 
-    public static DiffUtil.ItemCallback<Category> itemCallback=new DiffUtil.ItemCallback<Category>() {
+    public static DiffUtil.ItemCallback<Category> itemCallback = new DiffUtil.ItemCallback<Category>() {
         @Override
         public boolean areItemsTheSame(@NonNull Category oldItem, @NonNull Category newItem) {
             return oldItem.getId().equals(newItem.getId());
@@ -113,6 +112,6 @@ public class Category implements Serializable{
         public boolean areContentsTheSame(@NonNull Category oldItem, @NonNull Category newItem) {
             return oldItem.equals(newItem);
         }
-    } ;
+    };
 
 }

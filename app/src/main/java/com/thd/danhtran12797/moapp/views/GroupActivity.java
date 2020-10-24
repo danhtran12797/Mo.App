@@ -2,8 +2,6 @@ package com.thd.danhtran12797.moapp.views;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -29,17 +27,12 @@ import com.thd.danhtran12797.moapp.models.Group;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.thd.danhtran12797.moapp.viewmodels.GroupViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.ACTIVITY_REQUEST;
 import static com.thd.danhtran12797.moapp.utils.Constants.DATA_CHANGE;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_NAME;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_NAME;
 
@@ -84,7 +77,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
                         binding.setIsLoading(false);
                         if (groups != null) {
                             groupAdapter.submitList(groups);
-                        }else{
+                        } else {
                             Toast.makeText(GroupActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -101,8 +94,8 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
     }
 
     public void showAddGroupDialog() {
-        if(editGroupCustomBinding!=null)
-            editGroupCustomBinding=null;
+        if (editGroupCustomBinding != null)
+            editGroupCustomBinding = null;
 
         Dialog dialogs = new Dialog(this);
         editGroupCustomBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.edit_group_custom, null, false);
@@ -121,7 +114,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
         editGroupCustomBinding.positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameGroup=editGroupCustomBinding.nameGroupTextView.getText().toString();
+                String nameGroup = editGroupCustomBinding.nameGroupTextView.getText().toString();
                 if (!nameGroup.matches("")) {
                     editGroupCustomBinding.negativeButton.setEnabled(false);
                     editGroupCustomBinding.positiveButton.setEnabled(false);
@@ -132,13 +125,13 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
                             editGroupCustomBinding.negativeButton.setEnabled(true);
                             editGroupCustomBinding.positiveButton.setEnabled(true);
                             editGroupCustomBinding.setIsLoading(false);
-                            if(s!=null){
-                                if(s.equals("success")){
+                            if (s != null) {
+                                if (s.equals("success")) {
                                     Toast.makeText(GroupActivity.this, "Thêm nhóm thành công", Toast.LENGTH_SHORT).show();
                                     dialogs.dismiss();
                                     groupViewModel.setIsChangeData();
                                 }
-                            }else{
+                            } else {
                                 dialogs.dismiss();
                                 Toast.makeText(GroupActivity.this, "Vui lòng kiểm tra Internet", Toast.LENGTH_SHORT).show();
                             }
@@ -151,10 +144,10 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
         });
     }
 
-    public void showAddCategoryDialog(String groupId){
+    public void showAddCategoryDialog(String groupId) {
         imageUri = null;
-        if(editCategoryCustomBinding!=null)
-            editCategoryCustomBinding=null;
+        if (editCategoryCustomBinding != null)
+            editCategoryCustomBinding = null;
 
         Dialog dialogs = new Dialog(this);
         editCategoryCustomBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.edit_category_custom, null, false);
@@ -166,9 +159,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(GroupActivity.this);
+                checkPermission(GroupActivity.this);
             }
         });
 
@@ -182,18 +173,18 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
         editCategoryCustomBinding.positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageUri!=null){
+                if (imageUri != null) {
                     String nameCate = editCategoryCustomBinding.nameCateTextView.getText().toString();
-                    if(!nameCate.matches("")){
+                    if (!nameCate.matches("")) {
                         editCategoryCustomBinding.setIsLoading(true);
                         editCategoryCustomBinding.negativeButton.setEnabled(false);
                         editCategoryCustomBinding.positiveButton.setEnabled(false);
-                        File file = new File(imageUri.getPath());
-                        categoryViewModel.uploadImage(file, "cate").observe(GroupActivity.this, new Observer<String>() {
+//                        File file = new File(imageUri.getPath());
+                        categoryViewModel.uploadImage(imageUri, "cate").observe(GroupActivity.this, new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
-                                if(s!=null){
-                                    if(!s.equals("failed")){
+                                if (s != null) {
+                                    if (!s.equals("failed")) {
                                         categoryViewModel.insertCategory(groupId, nameCate, s).observe(GroupActivity.this, new Observer<String>() {
                                             @Override
                                             public void onChanged(String s) {
@@ -202,7 +193,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
                                                 editCategoryCustomBinding.positiveButton.setEnabled(true);
                                                 dialogs.dismiss();
                                                 if (s != null) {
-                                                    if(s.equals("success")){
+                                                    if (s.equals("success")) {
                                                         Toast.makeText(GroupActivity.this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
                                                         groupViewModel.setIsChangeData();
                                                     }
@@ -210,60 +201,19 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
                                             }
                                         });
                                     }
+                                } else {
+                                    Toast.makeText(GroupActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                                    dialogs.dismiss();
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         Toast.makeText(GroupActivity.this, "Vui lòng nhập tên danh mục!", Toast.LENGTH_SHORT).show();
                     }
-                }else
+                } else
                     Toast.makeText(GroupActivity.this, "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public void dummyData() {
-        lstGroup = new ArrayList<>();
-
-        Category category = new Category("1", "BK trong", IMAGE_URL);
-        Category category1 = new Category("1", "BK điện nano", IMAGE_URL);
-        Category category2 = new Category("1", "BK giấy nhăn", IMAGE_URL);
-        Category category3 = new Category("1", "BK điện nano không màu", IMAGE_URL);
-        Category category4 = new Category("1", "BK đục", IMAGE_URL);
-        Category category5 = new Category("1", "BK trong", IMAGE_URL);
-        Category category6 = new Category("1", "BK trong", IMAGE_URL);
-        Category category7 = new Category("1", "BK không màu", IMAGE_URL);
-        Category category8 = new Category("1", "BK điện nano không màu", IMAGE_URL);
-
-        List<Category> lstCate1 = new ArrayList<>();
-        lstCate1.add(category1);
-        lstCate1.add(category);
-        lstCate1.add(category2);
-        lstCate1.add(category3);
-        lstCate1.add(category4);
-        lstCate1.add(category5);
-        lstCate1.add(category6);
-        lstCate1.add(category7);
-        lstCate1.add(category8);
-
-        List<Category> lstCate2 = new ArrayList<>();
-        lstCate2.add(category5);
-        lstCate2.add(category6);
-        lstCate2.add(category7);
-        lstCate2.add(category8);
-
-        List<Category> lstCate3 = new ArrayList<>();
-        lstCate3.add(category2);
-        lstCate3.add(category3);
-        lstCate3.add(category4);
-        lstCate3.add(category5);
-        lstCate3.add(category6);
-        lstCate3.add(category7);
-        lstCate3.add(category8);
-
-        lstGroup.add(new Group("1", "Nhóm băng keo dân dụng", lstCate1));
-        lstGroup.add(new Group("1", "Nhóm băng keo văn phòng, gia đình, dán thùng", lstCate2));
-        lstGroup.add(new Group("1", "Nhóm băng keo công nghiệp", lstCate3));
     }
 
     @Override
@@ -276,12 +226,12 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
                 editCategoryCustomBinding.imageCategory.setImageURI(imageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                Log.d(TAG, "onActivityResult: "+error.getMessage());
+                Log.d(TAG, "onActivityResult: " + error.getMessage());
             }
-        }else if(requestCode==ACTIVITY_REQUEST&&resultCode==RESULT_OK&&data!=null){
-            boolean dataChane=data.getBooleanExtra(DATA_CHANGE, false);
-            Log.d(TAG, "onActivityResult: "+dataChane);
-            if(dataChane)
+        } else if (requestCode == ACTIVITY_REQUEST && resultCode == RESULT_OK && data != null) {
+            boolean dataChane = data.getBooleanExtra(DATA_CHANGE, false);
+            Log.d(TAG, "onActivityResult: " + dataChane);
+            if (dataChane)
                 groupViewModel.setIsChangeData();
         }
     }

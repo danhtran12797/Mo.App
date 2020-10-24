@@ -1,16 +1,12 @@
 package com.thd.danhtran12797.moapp.models;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 public class Group {
 
@@ -59,8 +55,8 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return id.equals(group.getId())&&
-                name.equals(group.getName())&&
+        return id.equals(group.getId()) &&
+                name.equals(group.getName()) &&
                 categories.equals(group.categories);
     }
 
@@ -69,7 +65,7 @@ public class Group {
 //        return Objects.hash(id, name, categories);
 //    }
 
-    public static DiffUtil.ItemCallback<Group> itemCallback=new DiffUtil.ItemCallback<Group>() {
+    public static DiffUtil.ItemCallback<Group> itemCallback = new DiffUtil.ItemCallback<Group>() {
         @Override
         public boolean areItemsTheSame(@NonNull Group oldItem, @NonNull Group newItem) {
             return oldItem.getId().equals(newItem.getId());

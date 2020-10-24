@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.thd.danhtran12797.moapp.models.Group;
 import com.thd.danhtran12797.moapp.repositories.GroupRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupViewModel extends ViewModel {
@@ -30,13 +29,6 @@ public class GroupViewModel extends ViewModel {
     public void setIsChangeData() {
         isChangeData.setValue(!isChangeData.getValue());
     }
-
-//    public void loadGroups() {
-//        List<Group> lstGroup = groupRepository.getGroups().getValue();
-//        Log.d("AAA", "loadGroups: HELLO");
-//        List<Group> customerList = new ArrayList<>();
-//        groupMutableLiveData.setValue(customerList);
-//    }
 
     public LiveData<List<Group>> getGroups() {
         return groupRepository.getGroups();

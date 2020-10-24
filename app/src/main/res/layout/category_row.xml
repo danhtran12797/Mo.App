@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="category"
             type="com.thd.danhtran12797.moapp.models.Category" />
+
         <variable
             name="categoryInterface"
             type="com.thd.danhtran12797.moapp.adapters.CategoryAdapter.CategoryInterface" />
@@ -15,32 +17,32 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
         app:cardCornerRadius="6dp"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
 
         <RelativeLayout
-            android:background="?attr/selectableItemBackground"
-            android:padding="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/categoryImageView"
-                android:categoryImage="@{category.image}"
-                android:layout_above="@+id/nameCategoryTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_above="@+id/nameCategoryTextView"
+                android:categoryImage="@{category.image}"
                 android:src="@drawable/image_cate" />
 
             <TextView
                 android:id="@+id/nameCategoryTextView"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@{category.name}"
                 tools:text="BK trong" />
         </RelativeLayout>
