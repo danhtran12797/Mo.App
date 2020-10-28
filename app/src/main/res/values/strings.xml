@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">Mo.App</string>
+
+    <string-array name="class_customer">
+        <item>Cá nhân</item>
+        <item>Doanh nghiệp</item>
+    </string-array>
+
+    <string-array name="frist_number_phone">
+        <item>086</item>
+        <item>096</item>
+        <item>097</item>
+        <item>098</item>
+        <item>032</item>
+        <item>033</item>
+        <item>034</item>
+        <item>035</item>
+        <item>036</item>
+        <item>037</item>
+        <item>038</item>
+        <item>039</item>
+        <item>088</item>
+        <item>091</item>
+        <item>094</item>
+        <item>083</item>
+        <item>084</item>
+        <item>085</item>
+        <item>081</item>
+        <item>083</item>
+        <item>082</item>
+        <item>089</item>
+        <item>090</item>
+        <item>093</item>
+        <item>070</item>
+        <item>079</item>
+        <item>077</item>
+        <item>076</item>
+        <item>078</item>
+        <item>092</item>
+        <item>056</item>
+        <item>058</item>
+        <item>099</item>
+        <item>059</item>
+    </string-array>
 </resources>

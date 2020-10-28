@@ -1,10 +1,7 @@
 package com.thd.danhtran12797.moapp.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
@@ -16,97 +13,59 @@ import com.thd.danhtran12797.moapp.models.Customer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewHolder> implements Filterable {
+public class CustomerAdapter extends ListAdapter<Customer, CustomerAdapter.ViewHolder> {
 
-    List<Customer> customersListAll;
-    CustomerAllInterface customerAllInterface;
-    OnItemClickListener itemClickListener;
+    private LayoutInflater layoutInflater;
+    private CustomerInterface customerInterface;
 
-    public CustomerAdapter(List<Customer> customersListAll, CustomerAllInterface customerAllInterface) {
+    public CustomerAdapter(CustomerInterface customerInterface) {
         super(Customer.itemCallback);
-        this.customerAllInterface = customerAllInterface;
-        this.customersListAll = new ArrayList<>(customersListAll);
+        this.customerInterface = customerInterface;
+    }
+
+    public void addAll(List<Customer> lstCustomer) {
+        ArrayList<Customer> arrCustomer = new ArrayList<>(getCurrentList());
+        arrCustomer.addAll(lstCustomer);
+        submitList(arrCustomer);
+    }
+
+    public void resetListCustomer() {
+        List<Customer> lst = new ArrayList<>();
+        submitList(lst);
     }
 
     @NonNull
     @Override
     public CustomerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        CustomerRowBinding customerRowBinding=CustomerRowBinding.inflate(layoutInflater, parent, false);
+        if (layoutInflater == null)
+            layoutInflater = LayoutInflater.from(parent.getContext());
+        CustomerRowBinding customerRowBinding = CustomerRowBinding.inflate(layoutInflater, parent, false);
+        customerRowBinding.setCustomerInterface(customerInterface);
         return new ViewHolder(customerRowBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomerAdapter.ViewHolder holder, int position) {
-        Customer customer = getItem(position);
-        holder.rowCustomerBinding.setCustomer(customer);
-        holder.rowCustomerBinding.executePendingBindings();
+        holder.bind(getItem(position));
     }
-
-    @Override
-    public Filter getFilter() {
-        return myFilter;
-    }
-
-    Filter myFilter = new Filter() {
-
-        //Automatic on background thread
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-
-            List<Customer> filteredList = new ArrayList<>();
-
-            if (charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(customersListAll);
-            } else {
-                for (Customer customer : customersListAll) {
-                    if (customer.getName().toLowerCase().contains(charSequence.toString().toLowerCase().trim())) {
-                        filteredList.add(customer);
-                    }
-                }
-            }
-
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = filteredList;
-            return filterResults;
-        }
-
-        //Automatic on UI thread
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            customerAllInterface.update((List<Customer>) filterResults.values);
-        }
-    };
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CustomerRowBinding rowCustomerBinding;
 
-        public ViewHolder(@NonNull CustomerRowBinding  binding) {
+        public ViewHolder(@NonNull CustomerRowBinding binding) {
             super(binding.getRoot());
 
-            this.rowCustomerBinding=binding;
+            this.rowCustomerBinding = binding;
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position =getAdapterPosition();
-                    if(itemClickListener!=null&&position!=RecyclerView.NO_POSITION){
-                        itemClickListener.onItemClick(getItem(position));
-                    }
-                }
-            });
+        public void bind(Customer customer) {
+            rowCustomerBinding.setCustomer(customer);
+            rowCustomerBinding.executePendingBindings();
         }
     }
 
-    public interface OnItemClickListener {
+    public interface CustomerInterface {
         void onItemClick(Customer customer);
-    }
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.itemClickListener = listener;
-    }
-
-    public interface CustomerAllInterface {
-        void update(List<Customer> customers);
     }
 }

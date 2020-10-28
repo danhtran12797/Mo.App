@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
         String username = activityMainBinding.usernameEditText.getText().toString();
         String password = activityMainBinding.passwordEditText.getText().toString();
         if (username.equals("danh123") && password.equals("123456")) {
-            startActivity(new Intent(this, ListCustomerActivity.class));
+            startActivity(new Intent(this, CustomerListActivity.class));
             finish();
         } else {
             closeKeyboard();

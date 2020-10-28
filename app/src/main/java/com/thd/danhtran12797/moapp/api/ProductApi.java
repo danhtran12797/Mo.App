@@ -84,5 +84,6 @@ public interface ProductApi {
 
     @GET("GetProductFromSearch.php")
     Call<List<Product>> GetProductFromSearch(@Query("search_name") String search_name, @Query("view_type") int view_type, @Query("page") int page);
+
 }
 

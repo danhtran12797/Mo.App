@@ -1,22 +1,27 @@
 package com.thd.danhtran12797.moapp.views;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.thd.danhtran12797.moapp.R;
 import com.thd.danhtran12797.moapp.databinding.ActivityDetailProductBinding;
+import com.thd.danhtran12797.moapp.databinding.DialogImageDetailBinding;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.thd.danhtran12797.moapp.viewmodels.ProductViewModel;
@@ -31,6 +36,7 @@ public class ProductDetailActivity extends BaseActivity {
     private static final String TAG = "DetailProductActivity";
 
     private ActivityDetailProductBinding detailProductBinding;
+    private DialogImageDetailBinding imageDetailBinding;
     private String productId;
     private ProductViewModel productViewModel;
     private CategoryViewModel categoryViewModel;
@@ -40,6 +46,7 @@ public class ProductDetailActivity extends BaseActivity {
     private String categoryId;
     private String name_pro, spec, color, material, thickness, price, width, length, adh_force, elas, charac, unit, bearing, exp_date;
     private Product productMain;
+    private Dialog imageDetailDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +65,18 @@ public class ProductDetailActivity extends BaseActivity {
             }
         });
 
-        detailProductBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
+        detailProductBinding.takePhotoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkPermission(ProductDetailActivity.this);
+            }
+        });
+
+        detailProductBinding.imageProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(productMain!=null||imageUri!=null)
+                    showProductDetailDialog();
             }
         });
 
@@ -119,13 +134,38 @@ public class ProductDetailActivity extends BaseActivity {
                     detailProductBinding.setProduct(productMain);
                 }
             });
-            setFocusableView(false);
+            detailProductBinding.setEnableView(false);
         } else {
             categoryId = getIntent().getStringExtra(KEY_CATEGORY_ID);
-            setFocusableView(true);
+            detailProductBinding.setEnableView(true);
             invalidateOptionsMenu();
             hideMenu = true;
         }
+
+        initImageDetail();
+    }
+
+    public void initImageDetail(){
+        imageDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_image_detail, null, false);
+
+        imageDetailDialog= new Dialog(this, android.R.style.Theme_Light);
+        imageDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        imageDetailDialog.setContentView(imageDetailBinding.getRoot());
+
+        imageDetailBinding.closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageDetailDialog.dismiss();
+            }
+        });
+    }
+
+    public void showProductDetailDialog(){
+        imageDetailDialog.show();
+        if(imageUri!=null)
+            imageDetailBinding.productImage.setImageURI(imageUri);
+        else
+            imageDetailBinding.setImageUrl(productMain.getImage());
     }
 
     public void showDeleteProductDialog() {
@@ -206,7 +246,7 @@ public class ProductDetailActivity extends BaseActivity {
                 if (s.equals("success")) {
                     detailProductBinding.setIsLoading(false);
                     Toast.makeText(ProductDetailActivity.this, "Cập nhật sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                    setFocusableView(false);
+                    detailProductBinding.setEnableView(false);
                     isDataChange = true;
                 }
             }
@@ -276,45 +316,45 @@ public class ProductDetailActivity extends BaseActivity {
         finish();
     }
 
-    private void setFocusableView(boolean state) {
-        detailProductBinding.nameEditText.setFocusable(state);
-        detailProductBinding.specEditText.setFocusable(state);
-        detailProductBinding.unitEditText.setFocusable(state);
-        detailProductBinding.materialEditText.setFocusable(state);
-        detailProductBinding.widthEditText.setFocusable(state);
-        detailProductBinding.lengthEditText.setFocusable(state);
-        detailProductBinding.colorEditText.setFocusable(state);
-        detailProductBinding.powerEditText.setFocusable(state);
-        detailProductBinding.adhForceEditText.setFocusable(state);
-        detailProductBinding.elasEditText.setFocusable(state);
-        detailProductBinding.characEditText.setFocusable(state);
-        detailProductBinding.priceEditText.setFocusable(state);
-        detailProductBinding.expDateEditText.setFocusable(state);
-        detailProductBinding.thicknessEditText.setFocusable(state);
-
-        detailProductBinding.saveProductButton.setVisibility(state == true ? View.VISIBLE : View.GONE);
-        detailProductBinding.imageEditLayout.setEnabled(state);
-
-        if (state) {
-            detailProductBinding.nameEditText.setFocusableInTouchMode(state);
-            detailProductBinding.specEditText.setFocusableInTouchMode(state);
-            detailProductBinding.unitEditText.setFocusableInTouchMode(state);
-            detailProductBinding.materialEditText.setFocusableInTouchMode(state);
-            detailProductBinding.widthEditText.setFocusableInTouchMode(state);
-            detailProductBinding.lengthEditText.setFocusableInTouchMode(state);
-            detailProductBinding.colorEditText.setFocusableInTouchMode(state);
-            detailProductBinding.powerEditText.setFocusableInTouchMode(state);
-            detailProductBinding.adhForceEditText.setFocusableInTouchMode(state);
-            detailProductBinding.elasEditText.setFocusableInTouchMode(state);
-            detailProductBinding.characEditText.setFocusableInTouchMode(state);
-            detailProductBinding.priceEditText.setFocusableInTouchMode(state);
-            detailProductBinding.expDateEditText.setFocusableInTouchMode(state);
-            detailProductBinding.thicknessEditText.setFocusableInTouchMode(state);
-        }
-
-        if (state)
-            detailProductBinding.nameEditText.requestFocus();
-    }
+//    private void setFocusableView(boolean state) {
+//        detailProductBinding.nameEditText.setFocusable(state);
+//        detailProductBinding.specEditText.setFocusable(state);
+//        detailProductBinding.unitEditText.setFocusable(state);
+//        detailProductBinding.materialEditText.setFocusable(state);
+//        detailProductBinding.widthEditText.setFocusable(state);
+//        detailProductBinding.lengthEditText.setFocusable(state);
+//        detailProductBinding.colorEditText.setFocusable(state);
+//        detailProductBinding.powerEditText.setFocusable(state);
+//        detailProductBinding.adhForceEditText.setFocusable(state);
+//        detailProductBinding.elasEditText.setFocusable(state);
+//        detailProductBinding.characEditText.setFocusable(state);
+//        detailProductBinding.priceEditText.setFocusable(state);
+//        detailProductBinding.expDateEditText.setFocusable(state);
+//        detailProductBinding.thicknessEditText.setFocusable(state);
+//
+//        detailProductBinding.saveProductButton.setVisibility(state == true ? View.VISIBLE : View.GONE);
+//        detailProductBinding.takePhotoImage.setEnabled(state);
+//
+//        if (state) {
+//            detailProductBinding.nameEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.specEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.unitEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.materialEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.widthEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.lengthEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.colorEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.powerEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.adhForceEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.elasEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.characEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.priceEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.expDateEditText.setFocusableInTouchMode(state);
+//            detailProductBinding.thicknessEditText.setFocusableInTouchMode(state);
+//        }
+//
+//        if (state)
+//            detailProductBinding.nameEditText.requestFocus();
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -346,7 +386,7 @@ public class ProductDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_product:
-                setFocusableView(true);
+                detailProductBinding.setEnableView(true);
                 break;
             case R.id.menu_delete_product:
                 showDeleteProductDialog();

@@ -26,14 +26,20 @@
             android:name=".views.ProductDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.InforCustomerActivity"
+            android:name=".views.CustomerDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.ListCustomerActivity"
-            android:screenOrientation="portrait" />
+            android:name=".views.CustomerListActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".views.CategoryActivity"
             android:screenOrientation="portrait" />
@@ -43,11 +49,7 @@
         <activity
             android:name=".views.GroupActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

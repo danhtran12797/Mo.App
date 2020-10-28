@@ -46,7 +46,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="44dp"
                             android:singleLine="true"
-                            android:textSize="13sp" />
+                            android:textSize="14sp" />
 
                         <ImageView
                             android:id="@+id/imgClose"

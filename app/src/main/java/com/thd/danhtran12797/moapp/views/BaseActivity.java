@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -39,7 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
-            Log.d("KKK", "showKeyboard: ");
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
@@ -121,6 +121,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 })
                 .check();
+    }
+
+    public void showSnackbarInternet(View view) {
+        Snackbar.make(view, "Vui lòng kiểm tra kết nối Internet!", Snackbar.LENGTH_LONG).show();
     }
 
 }

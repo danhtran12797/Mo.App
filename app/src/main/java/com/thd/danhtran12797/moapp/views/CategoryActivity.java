@@ -45,9 +45,7 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
     private ActivityCategoryBinding categoryBinding;
     private ProductAdapter productAdapter;
     private CategoryViewModel categoryViewModel;
-    private List<Product> lstProduct;
     private Category category;
-    private String groupId;
     private Uri imageUri;
     private EditCategoryCustomBinding editCategoryCustomBinding;
     private boolean isDataChange = false;
@@ -64,7 +62,7 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
 
         if (getIntent() != null) {
             category = (Category) getIntent().getSerializableExtra(KEY_CATEGORY);
-            groupId = getIntent().getStringExtra(KEY_GROUP_ID);
+//            groupId = getIntent().getStringExtra(KEY_GROUP_ID);
             getSupportActionBar().setTitle(category.getName());
         }
 

@@ -8,10 +8,6 @@
         <variable
             name="category"
             type="com.thd.danhtran12797.moapp.models.Category" />
-
-        <variable
-            name="categoryInterface"
-            type="com.thd.danhtran12797.moapp.adapters.CategoryAdapter.CategoryInterface" />
     </data>
 
     <androidx.cardview.widget.CardView

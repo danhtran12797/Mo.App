@@ -5,117 +5,112 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="customer"
             type="com.thd.danhtran12797.moapp.models.Customer" />
+
+        <variable
+            name="customerInterface"
+            type="com.thd.danhtran12797.moapp.adapters.CustomerAdapter.CustomerInterface" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:paddingLeft="16dp"
-        android:paddingTop="12dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/pattern_text_view"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="đi mẫu"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@+id/notify_price_textView"
-            app:layout_constraintEnd_toStartOf="@+id/order_text_view"
-            app:layout_constraintStart_toEndOf="@+id/notify_price_textView"
-            app:layout_constraintTop_toTopOf="@+id/notify_price_textView" />
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->customerInterface.onItemClick(customer)}"
+            android:paddingLeft="16dp"
+            android:paddingTop="12dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="10dp">
 
-        <Button
-            android:id="@+id/order_text_view"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="đơn hàng"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kilomet_text_view" />
+            <Button
+                android:id="@+id/patternTextView"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="đi mẫu"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                app:layout_constraintBottom_toBottomOf="@+id/notifyPriceTextView"
+                app:layout_constraintEnd_toStartOf="@+id/orderTextView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/notifyPriceTextView"
+                app:layout_constraintTop_toTopOf="@+id/notifyPriceTextView" />
 
-        <TextView
-            android:id="@+id/name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@{customer.name}"
-            tools:text="Trần Hùng Danh" />
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{customer.name}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Trần Hùng Danh" />
 
-        <TextView
-            android:id="@+id/address_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_text_view"
-            android:text="@{customer.address}"
-            tools:text="29/1 đường Lê Duẩn, phường Hiệp Bình, quận 7" />
+            <TextView
+                android:id="@+id/addressTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{customer.address}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+                tools:text="29/1 đường Lê Duẩn, phường Hiệp Bình, quận 7" />
 
-        <TextView
-            android:id="@+id/phone_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_text_view"
-            android:text="@{customer.phone}"
-            tools:text="0329254554" />
+            <TextView
+                android:id="@+id/phoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{customer.phone}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addressTextView"
+                tools:text="0329254554" />
 
-        <TextView
-            android:id="@+id/cassify_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle=""
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_text_view"
-            android:text="@{customer.classify}"
-            tools:text="Campuchia Balasama" />
+            <TextView
+                android:id="@+id/classTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{customer.classCus.equals(`0`)?`Cá nhân`:`Doanh nghiệp`}"
+                android:textStyle=""
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneTextView"
+                tools:text="Doanh nghiệp" />
 
-        <Button
-            android:id="@+id/detail_textView"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="XEM CHI TIẾT"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cassify_text_view" />
 
-        <Button
-            android:id="@+id/kilomet_text_view"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="(20 km)"
-            android:text="@{`(`+customer.kilomet + ` km)`}"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@+id/detail_textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/detail_textView" />
+            <Button
+                android:id="@+id/orderTextView"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đơn hàng"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                app:layout_constraintBottom_toBottomOf="@+id/patternTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/patternTextView"
+                app:layout_constraintTop_toTopOf="@+id/patternTextView" />
 
-        <Button
-            android:id="@+id/notify_price_textView"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="báo giá"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_textView" />
+            <Button
+                android:id="@+id/notifyPriceTextView"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Báo giá"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                app:layout_constraintEnd_toStartOf="@+id/patternTextView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/classTextView" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 </layout>

@@ -4,24 +4,66 @@ package com.thd.danhtran12797.moapp.models;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Customer implements Serializable {
+    @SerializedName("id")
+    @Expose
     private String id;
+    @SerializedName("class")
+    @Expose
+    private String classCus;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("phone")
+    @Expose
     private String phone;
+    @SerializedName("address")
+    @Expose
     private String address;
-    private String classify;
-    private String kilomet;
 
-    public Customer(String id, String name, String phone, String address, String classify, String kilomet) {
-        this.name = name;
-        this.phone = phone;
-        this.classify = classify;
-        this.kilomet = kilomet;
-        this.address = address;
+    public String getCity() {
+        String[] a = address.split(",");
+        return a[3];
+    }
+
+    public String getDistrict() {
+        String[] a = address.split(",");
+        return a[2];
+    }
+
+    public String getWard() {
+        String[] a = address.split(",");
+        return a[1];
+    }
+
+    public String getStreet() {
+        String[] a = address.split(",");
+        return a[0];
+    }
+
+    public Customer() {
+        this.classCus = "0";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getClassCus() {
+        return classCus;
+    }
+
+    public void setClassCus(String classCus) {
+        this.classCus = classCus;
     }
 
     public String getName() {
@@ -40,22 +82,6 @@ public class Customer implements Serializable {
         this.phone = phone;
     }
 
-    public String getClassify() {
-        return classify;
-    }
-
-    public void setClassify(String classify) {
-        this.classify = classify;
-    }
-
-    public String getKilomet() {
-        return kilomet;
-    }
-
-    public void setKilomet(String kilomet) {
-        this.kilomet = kilomet;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -64,29 +90,16 @@ public class Customer implements Serializable {
         this.address = address;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
         return name.equals(customer.name) &&
-                kilomet.equals(customer.kilomet) &&
+                phone.equals(customer.phone) &&
                 address.equals(customer.address) &&
                 phone.equals(customer.phone) &&
-                classify.equals(customer.classify);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, phone, address, classify, kilomet);
+                classCus.equals(customer.getClassCus());
     }
 
     public static DiffUtil.ItemCallback<Customer> itemCallback = new DiffUtil.ItemCallback<Customer>() {

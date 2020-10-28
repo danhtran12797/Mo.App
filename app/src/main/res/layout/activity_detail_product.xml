@@ -4,13 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="product"
             type="com.thd.danhtran12797.moapp.models.Product" />
+
+        <variable
+            name="enableView"
+            type="Boolean" />
+
         <variable
             name="isLoading"
             type="Boolean" />
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
     </data>
 
     <ScrollView
@@ -27,12 +34,12 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 android:backgroundTint="@color/white"
-                app:liftOnScroll="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:liftOnScroll="true">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/productDetailToolbar"
@@ -50,34 +57,45 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageProduct"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageCardView"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
-                    android:productImage="@{product.image}"
-                    android:src="@drawable/product_placeholder"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageProduct"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:productImage="@{product.image}"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/product_placeholder" />
+                </androidx.cardview.widget.CardView>
+
 
                 <ImageView
                     android:id="@+id/takePhotoImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:elevation="6dp"
                     android:src="@drawable/ic_baseline_add_a_photo"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageProduct"
-                    app:layout_constraintEnd_toEndOf="@+id/imageProduct"
-                    app:layout_constraintStart_toEndOf="@+id/imageProduct"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageCardView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageCardView"
+                    app:layout_constraintStart_toEndOf="@+id/imageCardView"
                     app:tint="@color/colorAccent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/productDetailLayout"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/saveProductButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -98,14 +116,17 @@
                         android:text="Tên sản phẩm: "
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
+
                     <EditText
                         android:id="@+id/nameEditText"
-                        android:inputType="text"
-                        android:text="@{product.name}"
-                        android:hint="Nhập tên sản phẩm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập tên sản phẩm"
+                        android:inputType="text"
+                        android:text="@{product.name}"
+                        android:textColor="@color/text_color"
                         tools:text="Băng keo trong - 50 mic" />
                 </LinearLayout>
 
@@ -124,12 +145,14 @@
 
                     <EditText
                         android:id="@+id/specEditText"
-                        android:inputType="text"
-                        android:text="@{product.spec}"
-                        android:hint="Nhập quy cách"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập quy cách"
+                        android:inputType="text"
+                        android:text="@{product.spec}"
+                        android:textColor="@color/text_color"
                         tools:text="4F8* 100Y (90 mét)" />
                 </LinearLayout>
 
@@ -148,12 +171,14 @@
 
                     <EditText
                         android:id="@+id/unitEditText"
-                        android:inputType="text"
-                        android:text="@{product.unit}"
-                        android:hint="Nhập đơn vị"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập đơn vị"
+                        android:inputType="text"
+                        android:text="@{product.unit}"
+                        android:textColor="@color/text_color"
                         tools:text="Cuộn" />
                 </LinearLayout>
 
@@ -172,12 +197,14 @@
 
                     <EditText
                         android:id="@+id/materialEditText"
-                        android:inputType="text"
-                        android:text="@{product.material}"
-                        android:hint="Nhập chất liệu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập chất liệu"
+                        android:inputType="text"
+                        android:text="@{product.material}"
+                        android:textColor="@color/text_color"
                         tools:text="OOP" />
                 </LinearLayout>
 
@@ -196,12 +223,14 @@
 
                     <EditText
                         android:id="@+id/widthEditText"
-                        android:inputType="text"
-                        android:text="@{product.width}"
-                        android:hint="Nhập chiều rộng"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập chiều rộng"
+                        android:inputType="text"
+                        android:text="@{product.width}"
+                        android:textColor="@color/text_color"
                         tools:text="10- 288mm" />
                 </LinearLayout>
 
@@ -220,12 +249,14 @@
 
                     <EditText
                         android:id="@+id/lengthEditText"
-                        android:inputType="text"
-                        android:text="@{product.length}"
-                        android:hint="Nhập chiều dài"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập chiều dài"
+                        android:inputType="text"
+                        android:text="@{product.length}"
+                        android:textColor="@color/text_color"
                         tools:text="35- 1000m" />
                 </LinearLayout>
 
@@ -244,12 +275,14 @@
 
                     <EditText
                         android:id="@+id/thicknessEditText"
-                        android:inputType="text"
-                        android:text="@{product.thickness}"
-                        android:hint="Nhập độ dày"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập độ dày"
+                        android:inputType="text"
+                        android:text="@{product.thickness}"
+                        android:textColor="@color/text_color"
                         tools:text="35- 65mic" />
                 </LinearLayout>
 
@@ -268,12 +301,14 @@
 
                     <EditText
                         android:id="@+id/colorEditText"
-                        android:inputType="text"
-                        android:text="@{product.color}"
-                        android:hint="Nhập màu sắc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập màu sắc"
+                        android:inputType="text"
+                        android:text="@{product.color}"
+                        android:textColor="@color/text_color"
                         tools:text="Trong sutts, nâu, màu" />
                 </LinearLayout>
 
@@ -292,12 +327,14 @@
 
                     <EditText
                         android:id="@+id/powerEditText"
-                        android:inputType="text"
-                        android:text="@{product.bearing}"
-                        android:hint="Nhập chịu lực"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập chịu lực"
+                        android:inputType="text"
+                        android:text="@{product.bearing}"
+                        android:textColor="@color/text_color"
                         tools:text=">=24N/10mm" />
                 </LinearLayout>
 
@@ -316,12 +353,14 @@
 
                     <EditText
                         android:id="@+id/adhForceEditText"
-                        android:inputType="text"
-                        android:text="@{product.adh_force}"
-                        android:hint="Nhập lực bám dính"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập lực bám dính"
+                        android:inputType="text"
+                        android:text="@{product.adh_force}"
+                        android:textColor="@color/text_color"
                         tools:text=">=4N/100mm" />
                 </LinearLayout>
 
@@ -340,12 +379,14 @@
 
                     <EditText
                         android:id="@+id/elasEditText"
-                        android:inputType="text"
-                        android:text="@{product.elas}"
-                        android:hint="Nhập độ giãn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập độ giãn"
+                        android:inputType="text"
+                        android:text="@{product.elas}"
+                        android:textColor="@color/text_color"
                         tools:text="162%" />
                 </LinearLayout>
 
@@ -364,12 +405,14 @@
 
                     <EditText
                         android:id="@+id/characEditText"
-                        android:inputType="text"
-                        android:text="@{product.charac}"
-                        android:hint="Nhập đặc điểm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập đặc điểm"
+                        android:inputType="text"
+                        android:text="@{product.charac}"
+                        android:textColor="@color/text_color"
                         tools:text="Không thấm nức" />
                 </LinearLayout>
 
@@ -388,12 +431,14 @@
 
                     <EditText
                         android:id="@+id/priceEditText"
-                        android:inputType="text"
-                        android:text='@{product.price}'
-                        android:hint="Nhập giá sản phẩm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập giá sản phẩm"
+                        android:inputType="text"
+                        android:text='@{product.price}'
+                        android:textColor="@color/text_color"
                         tools:text="6000 đ" />
                 </LinearLayout>
 
@@ -412,12 +457,14 @@
 
                     <EditText
                         android:id="@+id/expDateEditText"
-                        android:inputType="text"
-                        android:text="@{product.exp_date}"
-                        android:hint="Nhập hạn sử dụng"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:enabled="@{enableView}"
+                        android:hint="Nhập hạn sử dụng"
+                        android:inputType="text"
+                        android:text="@{product.exp_date}"
+                        android:textColor="@color/text_color"
                         tools:text="12/2025" />
                 </LinearLayout>
             </LinearLayout>
@@ -430,6 +477,7 @@
                 android:layout_marginRight="16dp"
                 android:padding="12dp"
                 android:text="Lưu"
+                android:visibility="@{enableView?View.VISIBLE:View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
