@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.ACTIVITY_REQUEST;
+import static com.thd.danhtran12797.moapp.utils.Constants.DATA_CHANGE;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_PRODUCT_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.REQUEST_CODE_SEARCH_VOICE;
 
@@ -40,6 +42,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
 
     private ActivitySearchProductBinding searchProductBinding;
     private CategoryViewModel categoryViewModel;
+    private boolean isDataChange = false;
     private int total_page = 0;
     private int page = 0;
     private boolean isLoading = false;
@@ -58,7 +61,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
         searchProductBinding.searchProductToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBack();
             }
         });
 
@@ -101,6 +104,18 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
                 promptSpeechInput();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBack();
+    }
+
+    public void onBack() {
+        Intent intent = new Intent();
+        intent.putExtra(DATA_CHANGE, isDataChange);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void eventScrollRecyclerView() {
@@ -249,6 +264,12 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
                 }
             }
             return;
+        } else if (requestCode == ACTIVITY_REQUEST && resultCode == RESULT_OK && null != data) {
+            boolean dataChange = data.getBooleanExtra(DATA_CHANGE, false);
+            Log.d(TAG, "onActivityResult: DATA CHANGE" + dataChange);
+            if (dataChange) {
+                isDataChange = dataChange;
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

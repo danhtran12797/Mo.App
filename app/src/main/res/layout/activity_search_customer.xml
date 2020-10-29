@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/searchCustomerToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toLeftOf="@+id/imgVoice">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/actv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/custom_search_view"
+                            android:hint="Nhập tên khách hàng"
+                            android:inputType="text"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="44dp"
+                            android:singleLine="true"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/imgClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_close_search"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <ImageView
+                        android:id="@+id/imgVoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/custom_image_voice"
+                        android:src="@drawable/ic_voice" />
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/customerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/customer_row" />
+
+        <LinearLayout
+            android:id="@+id/layoutSearchCustomer"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundGroupDetail"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:src="@drawable/ic_baseline_search_24"
+                app:tint="#ccc" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiềm kiếm khách hàng"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#ccc" />
+        </LinearLayout>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=gone}" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

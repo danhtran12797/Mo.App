@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thd.danhtran12797.moapp.adapters.CustomerAdapter;
-import com.thd.danhtran12797.moapp.databinding.ActivityListCustomerBinding;
+import com.thd.danhtran12797.moapp.databinding.ActivitySearchCustomerBinding;
 import com.thd.danhtran12797.moapp.models.Customer;
 import com.thd.danhtran12797.moapp.viewmodels.CustomerViewModel;
 
@@ -36,12 +36,13 @@ import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CUSTOMER;
 import static com.thd.danhtran12797.moapp.utils.Constants.NAME_SEARCH_CUSTOMER;
 import static com.thd.danhtran12797.moapp.utils.Constants.REQUEST_CODE_SEARCH_VOICE;
 
-public class CustomerListActivity extends BaseActivity implements CustomerAdapter.CustomerInterface {
+public class SearchCustomerActivity extends BaseActivity implements CustomerAdapter.CustomerInterface {
 
     private static final String TAG = "ListCustomerActivity";
 
     private CustomerViewModel customerViewModel;
-    private ActivityListCustomerBinding listCustomerBinding;
+    private ActivitySearchCustomerBinding searchCustomerBinding;
+    private boolean isDataChange = false;
 
     private CustomerAdapter customerAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -50,47 +51,54 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
     private int page = 1;
     private boolean isLoading = false;
 
+    private String nameSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listCustomerBinding = ActivityListCustomerBinding.inflate(getLayoutInflater());
-        setContentView(listCustomerBinding.getRoot());
+        searchCustomerBinding = ActivitySearchCustomerBinding.inflate(getLayoutInflater());
+        setContentView(searchCustomerBinding.getRoot());
+
+        if (getIntent().hasExtra(NAME_SEARCH_CUSTOMER)) {
+            nameSearch = getIntent().getStringExtra(NAME_SEARCH_CUSTOMER);
+            searchCustomerBinding.actv.setText(nameSearch);
+        }
+
+        setSupportActionBar(searchCustomerBinding.searchCustomerToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        searchCustomerBinding.searchCustomerToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBack();
+            }
+        });
 
         customerAdapter = new CustomerAdapter(this);
-        listCustomerBinding.customerRecyclerView.setAdapter(customerAdapter);
-        listCustomerBinding.customerRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        linearLayoutManager = (LinearLayoutManager) listCustomerBinding.customerRecyclerView.getLayoutManager();
+        searchCustomerBinding.customerRecyclerView.setAdapter(customerAdapter);
+        searchCustomerBinding.customerRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        linearLayoutManager = (LinearLayoutManager) searchCustomerBinding.customerRecyclerView.getLayoutManager();
 
         customerViewModel = new ViewModelProvider(this).get(CustomerViewModel.class);
         customerViewModel.getIsChangeData().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 Log.d(TAG, "onChanged: " + aBoolean);
-                listCustomerBinding.setIsLoading(true);
-                page = 1;
-                getTotalPage("", page);
+                searchCustomerBinding.setIsLoading(true);
+                getTotalPage(nameSearch, page);
             }
         });
 
-        listCustomerBinding.imgClose.setOnClickListener(new View.OnClickListener() {
+        searchCustomerBinding.imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listCustomerBinding.actv.setText("");
-                closeKeyboard();
+                searchCustomerBinding.actv.setText("");
             }
         });
 
-        listCustomerBinding.imgVoice.setOnClickListener(new View.OnClickListener() {
+        searchCustomerBinding.imgVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptSpeechInput();
-            }
-        });
-
-        listCustomerBinding.addCustomerFloating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(CustomerListActivity.this, CustomerDetailActivity.class), ACTIVITY_REQUEST);
             }
         });
 
@@ -98,9 +106,20 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
         eventScrollRecyclerView();
     }
 
+    @Override
+    public void onBackPressed() {
+        onBack();
+    }
+
+    public void onBack() {
+        Intent intent = new Intent();
+        intent.putExtra(DATA_CHANGE, isDataChange);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
     private void eventScrollRecyclerView() {
-        listCustomerBinding.customerRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        searchCustomerBinding.customerRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -118,10 +137,15 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
 
                 if (frist != 0 && frist + visible >= total_count && isLoading == false && page <= totalPage) {
                     isLoading = true;
-                    loadData("", ++page);
+                    loadData(nameSearch, ++page);
                 }
             }
         });
+    }
+
+    private void showLayoutSearch(boolean state) {
+        searchCustomerBinding.layoutSearchCustomer.setVisibility(state ? View.VISIBLE : View.GONE);
+        searchCustomerBinding.customerRecyclerView.setVisibility(state ? View.GONE : View.VISIBLE);
     }
 
     private void getTotalPage(String search_name, int page) {
@@ -131,10 +155,17 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
                 if (s != null) {
                     totalPage = Integer.parseInt(s);
                     Log.d(TAG, "TOTAL PAGE: " + totalPage);
-                    loadData(search_name, page);
+                    if (totalPage == 0) {
+                        showLayoutSearch(true);
+                        searchCustomerBinding.setIsLoading(false);
+                        Toast.makeText(SearchCustomerActivity.this, "Không tìm thấy khách hàng này!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        showLayoutSearch(false);
+                        loadData(search_name, page);
+                    }
                 } else {
-                    listCustomerBinding.setIsLoading(false);
-                    Toast.makeText(CustomerListActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                    searchCustomerBinding.setIsLoading(false);
+                    Toast.makeText(SearchCustomerActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -143,49 +174,48 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
     private void loadData(String search_name, int page) {
         Log.d(TAG, "PAGE CURRENT: " + page);
         if (page > totalPage) {
-//            Toast.makeText(this, "Đã hết dữ liệu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Đã hết dữ liệu", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        listCustomerBinding.setIsLoading(true);
+        searchCustomerBinding.setIsLoading(true);
         customerViewModel.getCustomers(search_name, page).observe(this, new Observer<List<Customer>>() {
             @Override
             public void onChanged(List<Customer> customers) {
-                listCustomerBinding.setIsLoading(false);
+                searchCustomerBinding.setIsLoading(false);
                 if (customers != null) {
                     Log.d(TAG, "CUSTOMER SIZE: " + customers.size());
                     isLoading = false;
                     customerAdapter.addAll(customers);
                 } else
-                    Toast.makeText(CustomerListActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchCustomerActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void initAutocompleteSearch() {
-        listCustomerBinding.actv.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        listCustomerBinding.actv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchCustomerBinding.actv.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        searchCustomerBinding.actv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (v.getText().length() != 0) {
-                        Log.d(TAG, "onEditorAction: GOOD JOB");
-                        String nameSearch = listCustomerBinding.actv.getText().toString();
-                        Intent intent = new Intent(CustomerListActivity.this, SearchCustomerActivity.class);
-                        intent.putExtra(NAME_SEARCH_CUSTOMER, nameSearch);
-                        startActivityForResult(intent, ACTIVITY_REQUEST);
-                    } else {
-                        Log.d(TAG, "onEditorAction: NULL");
-                        Toast.makeText(CustomerListActivity.this, "Vui lòng nhập tên khách hàng!", Toast.LENGTH_SHORT).show();
+                        nameSearch = searchCustomerBinding.actv.getText().toString().trim();
+                        if (!nameSearch.isEmpty()) {
+                            closeKeyboard();
+                            page = 1;
+                            customerAdapter.resetListCustomer();
+                            customerViewModel.setIsChangeData();
+                        } else
+                            Toast.makeText(SearchCustomerActivity.this, "Vui lòng nhập tên khách hàng!", Toast.LENGTH_SHORT).show();
                     }
-
                     return true;
                 }
                 return false;
             }
         });
 
-        listCustomerBinding.actv.addTextChangedListener(new TextWatcher() {
+        searchCustomerBinding.actv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -194,11 +224,12 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
-                    listCustomerBinding.imgClose.setVisibility(View.VISIBLE);
-                    listCustomerBinding.imgVoice.setVisibility(View.GONE);
+                    searchCustomerBinding.imgClose.setVisibility(View.VISIBLE);
+                    searchCustomerBinding.imgVoice.setVisibility(View.GONE);
                 } else {
-                    listCustomerBinding.imgClose.setVisibility(View.GONE);
-                    listCustomerBinding.imgVoice.setVisibility(View.VISIBLE);
+                    showLayoutSearch(true);
+                    searchCustomerBinding.imgClose.setVisibility(View.GONE);
+                    searchCustomerBinding.imgVoice.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -231,8 +262,8 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
             if (matches != null && matches.size() > 0) {
                 String searchWrd = matches.get(0);
                 if (!TextUtils.isEmpty(searchWrd)) {
-                    listCustomerBinding.actv.setText(searchWrd);
-                    listCustomerBinding.actv.requestFocus();
+                    searchCustomerBinding.actv.setText(searchWrd);
+                    searchCustomerBinding.actv.requestFocus();
                     showKeyboard();
                 }
             }
@@ -241,6 +272,8 @@ public class CustomerListActivity extends BaseActivity implements CustomerAdapte
             boolean dataChange = data.getBooleanExtra(DATA_CHANGE, false);
             Log.d(TAG, "onActivityResult: DATA CHANGE" + dataChange);
             if (dataChange) {
+                isDataChange = dataChange;
+                page = 1;
                 customerAdapter.resetListCustomer();
                 customerViewModel.setIsChangeData();
             }

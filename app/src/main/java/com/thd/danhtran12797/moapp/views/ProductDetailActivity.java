@@ -75,7 +75,7 @@ public class ProductDetailActivity extends BaseActivity {
         detailProductBinding.imageProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(productMain!=null||imageUri!=null)
+                if (productMain != null || imageUri != null)
                     showProductDetailDialog();
             }
         });
@@ -145,10 +145,10 @@ public class ProductDetailActivity extends BaseActivity {
         initImageDetail();
     }
 
-    public void initImageDetail(){
+    public void initImageDetail() {
         imageDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_image_detail, null, false);
 
-        imageDetailDialog= new Dialog(this, android.R.style.Theme_Light);
+        imageDetailDialog = new Dialog(this, android.R.style.Theme_Light);
         imageDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         imageDetailDialog.setContentView(imageDetailBinding.getRoot());
 
@@ -160,9 +160,9 @@ public class ProductDetailActivity extends BaseActivity {
         });
     }
 
-    public void showProductDetailDialog(){
+    public void showProductDetailDialog() {
         imageDetailDialog.show();
-        if(imageUri!=null)
+        if (imageUri != null)
             imageDetailBinding.productImage.setImageURI(imageUri);
         else
             imageDetailBinding.setImageUrl(productMain.getImage());

@@ -242,7 +242,6 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
 //        distric = arr[2];
 //        ward = arr[1];
 //        address = arr[0];
-
     }
 
     private boolean checkValidate() {
@@ -293,13 +292,13 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
         }
 
         if (district.isEmpty()) {
-            detailCustomerBinding.districtTextInputLayout.setError("Vui lòng chọn Tỉnh/Thành phố!");
+            detailCustomerBinding.districtTextInputLayout.setError("Vui lòng chọn Quận/Huyện!");
             detailCustomerBinding.districtTextInputLayout.requestFocus();
             return false;
         }
 
         if (ward.isEmpty()) {
-            detailCustomerBinding.wardTextInputLayout.setError("Vui lòng chọn Tỉnh/Thành phố!");
+            detailCustomerBinding.wardTextInputLayout.setError("Vui lòng chọn Phường/Xã!");
             detailCustomerBinding.wardEditText.requestFocus();
             return false;
         }
@@ -385,7 +384,9 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_customer:
+                detailCustomerBinding.nameEditText.requestFocus();
                 detailCustomerBinding.setEnableView(true);
+                getSupportActionBar().setTitle("Cập nhật khách hàng");
                 break;
             case R.id.menu_delete_customer:
                 showDeleteDialog();
