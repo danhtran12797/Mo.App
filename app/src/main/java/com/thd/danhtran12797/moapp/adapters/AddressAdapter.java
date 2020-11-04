@@ -19,25 +19,24 @@ import java.util.List;
 public class AddressAdapter extends ListAdapter<AddressDetail, AddressAdapter.ViewHolder> implements Filterable {
 
     List<AddressDetail> addressListAll;
-//    AddressAllInterface addressAllInterface;
     AddressInterface addressInterface;
     LayoutInflater layoutInflater;
 
     public AddressAdapter(AddressInterface addressInterface) {
         super(AddressDetail.itemCallback);
-        this.addressInterface=addressInterface;
+        this.addressInterface = addressInterface;
     }
 
-    public void setAddressListAll(List<AddressDetail> addressListAll){
-        this.addressListAll=new ArrayList<>(addressListAll);
+    public void setAddressListAll(List<AddressDetail> addressListAll) {
+        this.addressListAll = new ArrayList<>(addressListAll);
     }
 
     @NonNull
     @Override
     public AddressAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (layoutInflater==null)
-            layoutInflater=LayoutInflater.from(parent.getContext());
-        SelectAddressRowBinding addressRowBinding=SelectAddressRowBinding.inflate(layoutInflater, parent, false);
+        if (layoutInflater == null)
+            layoutInflater = LayoutInflater.from(parent.getContext());
+        SelectAddressRowBinding addressRowBinding = SelectAddressRowBinding.inflate(layoutInflater, parent, false);
         return new ViewHolder(addressRowBinding);
     }
 
@@ -72,8 +71,7 @@ public class AddressAdapter extends ListAdapter<AddressDetail, AddressAdapter.Vi
         //Automatic on UI thread
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//            addressAllInterface.update((List<AddressDetail>) filterResults.values);
-            submitList((List<AddressDetail>)filterResults.values);
+            submitList((List<AddressDetail>) filterResults.values);
         }
     };
 
@@ -85,10 +83,11 @@ public class AddressAdapter extends ListAdapter<AddressDetail, AddressAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         SelectAddressRowBinding addressRowBinding;
+
         public ViewHolder(SelectAddressRowBinding addressRowBinding) {
             super(addressRowBinding.getRoot());
 
-            this.addressRowBinding=addressRowBinding;
+            this.addressRowBinding = addressRowBinding;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,11 +103,7 @@ public class AddressAdapter extends ListAdapter<AddressDetail, AddressAdapter.Vi
 
     }
 
-    public interface AddressInterface{
+    public interface AddressInterface {
         void onItemClick(AddressDetail addressDetail);
-    }
-
-    public interface AddressAllInterface {
-        void update(List<AddressDetail> customers);
     }
 }

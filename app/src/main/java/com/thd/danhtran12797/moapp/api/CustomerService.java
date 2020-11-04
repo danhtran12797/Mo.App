@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_PRO_URL;
 import static com.thd.danhtran12797.moapp.utils.Constants.CONNECTION_TIMEOUT;
@@ -31,12 +32,11 @@ public class CustomerService {
 
             .build();
 
-    private static Gson gson=new GsonBuilder().setLenient().create();
+    private static Gson gson = new GsonBuilder().setLenient().create();
 
     private static Retrofit.Builder retrofitBuilder =
             new Retrofit.Builder()
                     .baseUrl(BASE_PRO_URL)
-//                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson));
 //                    .addConverterFactory(ScalarsConverterFactory.create());
 
@@ -44,7 +44,7 @@ public class CustomerService {
 
     private static CustomerApi customerApi = retrofit.create(CustomerApi.class);
 
-    public static CustomerApi getCustomerApi(){
+    public static CustomerApi getCustomerApi() {
         return customerApi;
     }
 

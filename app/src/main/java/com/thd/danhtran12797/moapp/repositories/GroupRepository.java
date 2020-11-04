@@ -28,8 +28,8 @@ public class GroupRepository {
         productApi.GetGroupAll().enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                Log.d("AAA", "onResponse: " + response.body().get(0).getName());
                 if (response.isSuccessful()) {
+                    Log.d("AAA", "onResponse: " + response.body().get(0).getName());
                     groupMutableLiveData.setValue(response.body());
                 }
             }

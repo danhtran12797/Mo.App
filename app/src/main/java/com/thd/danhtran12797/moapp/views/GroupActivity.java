@@ -159,7 +159,7 @@ public class GroupActivity extends BaseActivity implements GroupAdapter.GroupInt
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkPermission(GroupActivity.this);
+                checkPermission(GroupActivity.this, false);
             }
         });
 

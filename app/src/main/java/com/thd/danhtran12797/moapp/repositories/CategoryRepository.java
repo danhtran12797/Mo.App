@@ -69,7 +69,7 @@ public class CategoryRepository {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("AAA", "onFailure: " + t.getMessage());
+                Log.d("AAA", "onFailure: uploadImage: " + t.getMessage());
                 nameMutableLiveData.setValue(null);
             }
         });
@@ -112,18 +112,19 @@ public class CategoryRepository {
         return updateMutableLiveData;
     }
 
-    public MutableLiveData<String> insertProduct(String id_cate, String name_pro, String image_pro, String price,
+    public MutableLiveData<String> insertProduct(String id_cate, String name_pro, String price,
                                                  String quantity, String spec, String material, String thickness,
                                                  String width, String length, String color, String adh_force, String elas,
-                                                 String charac, String unit, String bearing, String exp_date) {
+                                                 String charac, String unit, String bearing, String exp_date, String json_images) {
 
         MutableLiveData<String> inserMultableLivaData = new MutableLiveData<>();
-        productApi.InsertProduct(id_cate, name_pro, image_pro, price, quantity, spec, material, thickness, width, length, color,
-                adh_force, elas, charac, unit, bearing, exp_date)
+        productApi.InsertProduct(id_cate, name_pro, price, quantity, spec, material, thickness, width, length, color,
+                adh_force, elas, charac, unit, bearing, exp_date, json_images)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        inserMultableLivaData.setValue(response.body());
+                        if (response.isSuccessful())
+                            inserMultableLivaData.setValue(response.body());
                     }
 
                     @Override

@@ -59,35 +59,58 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/imageCardView"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="130dp"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:id="@+id/imageProduct"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:productImage="@{product.image}"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/product_placeholder" />
+                    <RelativeLayout
+                        android:padding="2dp"
+                        android:background="@drawable/custome_layout_image_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/imageProduct"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
+                            android:productImage="@{product.imageFirst}"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/product_placeholder" />
+                        <TextView
+                            android:id="@+id/line"
+                            android:layout_toRightOf="@+id/imageProduct"
+                            android:background="@color/backgroundGroupDetail"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/imageDetailRecyclerView"
+                            tools:listitem="@layout/image_detail2_row"
+                            android:layout_toRightOf="@+id/line"
+                            android:layout_width="30dp"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                        <TextView
+                            android:id="@+id/countImageTextView"
+                            android:layout_toRightOf="@+id/imageDetailRecyclerView"
+                            android:text="+2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"/>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/takePhotoImage"-->
+<!--                            android:visibility="gone"-->
+<!--                            android:layout_toRightOf="@+id/imageDetailRecyclerView"-->
+<!--                            android:layout_alignParentBottom="true"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:elevation="10dp"-->
+<!--                            android:src="@drawable/ic_baseline_add_a_photo"-->
+<!--                            app:tint="@color/colorAccent" />-->
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-
-                <ImageView
-                    android:id="@+id/takePhotoImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="6dp"
-                    android:src="@drawable/ic_baseline_add_a_photo"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageCardView"
-                    app:layout_constraintEnd_toEndOf="@+id/imageCardView"
-                    app:layout_constraintStart_toEndOf="@+id/imageCardView"
-                    app:tint="@color/colorAccent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout

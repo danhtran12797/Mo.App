@@ -92,6 +92,7 @@ public class SearchCustomerActivity extends BaseActivity implements CustomerAdap
             @Override
             public void onClick(View v) {
                 searchCustomerBinding.actv.setText("");
+                closeKeyboard();
             }
         });
 

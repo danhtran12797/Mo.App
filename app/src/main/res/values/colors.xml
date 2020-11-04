@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+<color name="colorPrimary">#6200EE</color>
+<color name="colorPrimaryDark">#3700B3</color>
+<color name="colorAccent">#03DAC5</color>
 
-    <color name="text_color">#de000000</color>
-    <color name="backgroundGroupDetail">#E6E6E6</color>
-    <color name="white">#fff</color>
-    <color name="black">#000</color>
-    <color name="lightGray">#ededed</color>
-    <color name="dart1">#f0f0f0</color>
+<color name="text_color">#de000000</color>
+<color name="backgroundGroupDetail">#E6E6E6</color>
+<color name="white">#fff</color>
+<color name="black">#171717</color>
+<color name="red">#EC1111</color>
+<color name="lightGray">#ededed</color>
+<color name="dart1">#f0f0f0</color>
 </resources>

@@ -13,9 +13,7 @@ import com.thd.danhtran12797.moapp.databinding.ProductRowBinding;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.utils.ScreenUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductViewHolder> {
@@ -70,11 +68,10 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductV
 
             int size = ScreenUtils.getInstance().getWidth() / 2;
             productRowBinding.getRoot().setLayoutParams(new CardView.LayoutParams(size, size));
-            Log.d("BBB", "ProductViewHolder: ");
         }
 
         public void bind(Product product) {
-            Log.d("BBB", "bind: ");
+            Log.d("AAA", "bind: SIZE: "+product.getImageDetail().size());
             productRowBinding.setProduct(product);
             productRowBinding.executePendingBindings();
         }

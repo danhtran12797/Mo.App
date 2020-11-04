@@ -4,10 +4,10 @@ public class Constants {
 
     public static final String BASE_CUS_URL = "http://192.168.42.105/moapp/";
 
-    // 192.168.0.110
-    public static final String BASE_PRO_URL = "http://192.168.0.110/moapp/";
-    public static final String BASE_IMAGE_CATE_URL = "http://192.168.0.110/moapp/image/categories/";
-    public static final String BASE_IMAGE_PRO_URL = "http://192.168.0.110/moapp/image/product/";
+    // 192.168.42.108
+    public static final String BASE_PRO_URL = "http://192.168.42.108/moapp/server/";
+    public static final String BASE_IMAGE_CATE_URL = "http://192.168.42.108/moapp/image/categories/";
+    public static final String BASE_IMAGE_PRO_URL = "http://192.168.42.108/moapp/image/product/";
     public static final String BASE_ADDRESS_URL = "https://thongtindoanhnghiep.co/api/";
 
 //    public static final String BASE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/";
@@ -31,4 +31,5 @@ public class Constants {
 
     public static final int ACTIVITY_REQUEST = 1;
     public static final int REQUEST_CODE_SEARCH_VOICE = 2;
+    public static final int PICK_IMAGE_MULTIPLE = 3;
 }

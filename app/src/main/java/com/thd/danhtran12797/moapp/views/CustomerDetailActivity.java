@@ -247,7 +247,6 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
     private boolean checkValidate() {
         detailCustomerBinding.nameTextInputLayout.setError(null);
         detailCustomerBinding.phoneTextInputLayout.setError(null);
-        detailCustomerBinding.classTextInputLayout.setError(null);
         detailCustomerBinding.cityTextInputLayout.setError(null);
         detailCustomerBinding.districtTextInputLayout.setError(null);
         detailCustomerBinding.wardTextInputLayout.setError(null);
@@ -309,20 +308,20 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
     private void showDeleteDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Xóa khách hàng");
-        builder.setMessage("Bạn có xác nhận xóa khách hàng này?");
+        builder.setMessage("Bạn có đồng ý xóa khách hàng này?");
         builder.setIcon(R.drawable.ic_baseline_warning);
         builder.setCancelable(false);
-        builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deletecustomer();
+                deleteCustomer();
             }
         });
         builder.setNegativeButton("Hủy", null);
         builder.show();
     }
 
-    private void deletecustomer() {
+    private void deleteCustomer() {
         detailCustomerBinding.setIsLoading(true);
         customerViewModel.deleteCustomer(customer.getId()).observe(this, new Observer<String>() {
             @Override
@@ -467,7 +466,8 @@ public class CustomerDetailActivity extends BaseActivity implements View.OnClick
             case R.id.saveButton:
                 name = detailCustomerBinding.nameEditText.getText().toString().trim();
                 phone = detailCustomerBinding.phoneEditText.getText().toString().trim();
-                classCus = detailCustomerBinding.classEditText.getText().toString().trim();
+                String temp= detailCustomerBinding.classEditText.getText().toString().trim();
+                classCus =temp.equals("Cá nhân")?"0":"1";
                 city = detailCustomerBinding.cityEditText.getText().toString().trim();
                 district = detailCustomerBinding.districtEditText.getText().toString().trim();
                 ward = detailCustomerBinding.wardEditText.getText().toString().trim();

@@ -105,7 +105,6 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
                 });
             }
         });
-
     }
 
     public void openActivityAddProduct() {
@@ -178,7 +177,7 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 checkPermission(CategoryActivity.this);
+                 checkPermission(CategoryActivity.this, false);
             }
         });
 

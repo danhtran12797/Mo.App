@@ -224,7 +224,7 @@ public class GroupDetailActivity extends BaseActivity implements CategoryAdapter
         editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkPermission(GroupDetailActivity.this);
+                checkPermission(GroupDetailActivity.this, false);
             }
         });
 

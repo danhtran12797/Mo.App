@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.thd.danhtran12797.moapp.api.CustomerApi;
 import com.thd.danhtran12797.moapp.api.CustomerService;
+import com.thd.danhtran12797.moapp.databinding.DialogImageDetailBinding;
 import com.thd.danhtran12797.moapp.models.Customer;
 
 import java.util.List;
@@ -63,13 +64,14 @@ public class CustomerRepository {
         customerApi.UpdateCustomer(id, name, classCus, phone, address).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("AAA", "UPDATE CUS: "+response.body());
                 if(response.isSuccessful())
                     mutableLiveData.setValue(response.body());
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("AAA", "onFailure: "+t.getMessage());
+                Log.d("AAA", "onFailure UPDATE: "+t.getMessage());
                 mutableLiveData.setValue(null);
             }
         });
@@ -81,6 +83,7 @@ public class CustomerRepository {
         customerApi.InsertCustomer(name, classCus, phone, address).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("AAA", "INSERT CUS: "+response.body());
                 if(response.isSuccessful())
                     mutableLiveData.setValue(response.body());
             }

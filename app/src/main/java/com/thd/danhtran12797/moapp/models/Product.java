@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import com.thd.danhtran12797.moapp.R;
 
 import java.io.Serializable;
+import java.util.List;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.BASE_IMAGE_PRO_URL;
 
@@ -25,9 +26,7 @@ public class Product implements Serializable {
     @SerializedName("spec")
     @Expose
     private String spec;
-    @SerializedName("image")
-    @Expose
-    private String image;
+
     @SerializedName("price")
     @Expose
     private String price;
@@ -77,6 +76,24 @@ public class Product implements Serializable {
     @SerializedName("thickness")
     @Expose
     private String thickness;
+
+    @SerializedName("image_detail")
+    @Expose
+    private List<ImageDetail> imageDetail = null;
+
+    public String getImageFirst() {
+        if (imageDetail != null && imageDetail.size() > 0)
+            return imageDetail.get(0).getImage();
+        return null;
+    }
+
+    public List<ImageDetail> getImageDetail() {
+        return imageDetail;
+    }
+
+    public void setImageDetail(List<ImageDetail> imageDetail) {
+        this.imageDetail = imageDetail;
+    }
 
     public String getThickness() {
         return thickness;
@@ -132,14 +149,6 @@ public class Product implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getPrice() {
@@ -214,10 +223,9 @@ public class Product implements Serializable {
         this.charac = charac;
     }
 
-    public Product(String name, String spec, String image) {
+    public Product(String name, String spec) {
         this.name = name;
         this.spec = spec;
-        this.image = image;
     }
 
     @BindingAdapter("android:productImage")
@@ -238,8 +246,8 @@ public class Product implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return name.equals(product.name) &&
-                image.equals(product.image) &&
-                spec.equals(product.spec);
+                spec.equals(product.spec) &&
+                imageDetail.equals(product.imageDetail);
     }
 
 //    @Override

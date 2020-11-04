@@ -72,6 +72,5 @@
                 tools:listitem="@layout/category_row" />
         </RelativeLayout>
 
-
     </LinearLayout>
 </layout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_add_image"
+        android:title="Thêm ảnh" />
+    <item
+        android:id="@+id/menu_edit_image"
+        android:title="Chỉnh sửa ảnh" />
+    <item
+        android:id="@+id/menu_delete_image"
+        android:title="Xóa ảnh" />
+</menu>
