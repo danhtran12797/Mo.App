@@ -8,8 +8,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.UUID;
 
 public class ImageResizer {
 
@@ -45,10 +47,13 @@ public class ImageResizer {
             }
             StringBuilder sb2 = new StringBuilder();
             sb2.append(file.getPath());
-            String file_name = "/" + System.currentTimeMillis() + ".jpg";
+//            String file_name = "/" + System.currentTimeMillis() + ".jpg";
+            String file_name = "/" + generate_unique_id() + ".jpg";
             sb2.append(file_name);
             imagepath = new File(sb2.toString());
             try {
+                imagepath.createNewFile();
+
                 FileOutputStream fileOutputStream = new FileOutputStream(imagepath);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                 fileOutputStream.flush();
@@ -78,7 +83,11 @@ public class ImageResizer {
         }
     }
 
-//    public static File getBitmapFile(Bitmap reduceBitmap) {
+    public static String generate_unique_id() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+//    public static File saveBitmap(Bitmap reduceBitmap) {
 //        File file = new File(Environment.getExternalStorageDirectory() + File.separator + "moapp3");
 //        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //        reduceBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

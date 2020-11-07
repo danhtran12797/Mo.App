@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="isLoading"
             type="Boolean" />
@@ -97,50 +98,54 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <RelativeLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroundGroupDetail"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:spanCount="2" />
+
+            <LinearLayout
+                android:id="@+id/layoutSearchProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/backgroundGroupDetail"
+                android:gravity="center"
+                android:orientation="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/searchRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/backgroundGroupDetail"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2" />
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/ic_baseline_search_24"
+                    app:tint="#ccc" />
 
-                <LinearLayout
-                    android:id="@+id/layoutSearchProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/backgroundGroupDetail"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:src="@drawable/ic_baseline_search_24"
-                        app:tint="#ccc" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tiềm kiếm sản phẩm"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#ccc" />
-                </LinearLayout>
-
-                <ProgressBar
-                    style="@style/Widget.AppCompat.ProgressBar"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="@{isLoading?View.VISIBLE:View.GONE, default=visible}" />
-            </RelativeLayout>
+                    android:text="Tiềm kiếm sản phẩm"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#ccc" />
+            </LinearLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#73000000"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:visibility="@{isLoading?View.VISIBLE:View.GONE,default=gone}">
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
     </RelativeLayout>
 </layout>

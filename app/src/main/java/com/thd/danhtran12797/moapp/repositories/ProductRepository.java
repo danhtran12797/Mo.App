@@ -35,8 +35,8 @@ public class ProductRepository {
         productApi.GetProduct(id).enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                productMutableLiveData.setValue(response.body());
-                Log.d("AAA", "onResponse: " + response.body().toString());
+                if (response.isSuccessful())
+                    productMutableLiveData.setValue(response.body());
             }
 
             @Override
@@ -59,7 +59,8 @@ public class ProductRepository {
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        inserMultableLivaData.setValue(response.body());
+                        if (response.isSuccessful())
+                            inserMultableLivaData.setValue(response.body());
                     }
 
                     @Override

@@ -226,8 +226,10 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
                         detailProductBinding.countImageTextView.setText("+" + lstBitmapCrop.size());
                     } else {
                         detailProductBinding.imageProduct.setImageBitmap(lstBitmapCrop.get(0));
-                        if (lstBitmapCrop.size() > 1)
+                        if (lstBitmapCrop.size() > 1){
                             detailProductBinding.countImageTextView.setText("+" + (lstBitmapCrop.size() - 1));
+                        }else if(lstBitmapCrop.size()==1)
+                            detailProductBinding.countImageTextView.setVisibility(View.GONE);
                     }
                 } else {
                     cropImageBinding.currentCropTextView.setText(currentCropImage + "");
@@ -586,7 +588,12 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
             case R.id.menu_delete_image:
                 imageDetailDialog.dismiss();
                 detailProductBinding.setIsLoading(true);
-                updateImage(imageDetailAdapter.getIdImageDetail(), "");
+                if(imageDetailAdapter.getLstImageDetail()!=null&&imageDetailAdapter.getLstImageDetail().size()==1){
+                    detailProductBinding.setIsLoading(false);
+                    Toast.makeText(this, "Không thể xóa hình ảnh này! Chỉ được chỉnh sửa.", Toast.LENGTH_SHORT).show();
+                }else{
+                    updateImage(imageDetailAdapter.getIdImageDetail(), "");
+                }
                 break;
         }
         return false;

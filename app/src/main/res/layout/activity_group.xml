@@ -16,26 +16,10 @@
         android:layout_height="match_parent"
         tools:context=".views.GroupActivity">
 
-        <!--    <com.google.android.material.appbar.AppBarLayout-->
-        <!--        android:id="@+id/groupAppBarLayout"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toTopOf="parent"-->
-        <!--        android:theme="@style/AppTheme.AppBarOverlay">-->
-
-        <!--        <androidx.appcompat.widget.Toolbar-->
-        <!--            android:id="@+id/groupToolbar"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="?attr/actionBarSize"-->
-        <!--            app:popupTheme="@style/AppTheme.PopupOverlay"/>-->
-        <!--    </com.google.android.material.appbar.AppBarLayout>-->
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/groupRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,33 +27,36 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/group_row" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addGroupFloating"
+            android:src="@drawable/ic_add_group"
+            app:backgroundTint="@color/white"
+            app:borderWidth="2dp"
+            app:rippleColor="@color/colorPrimaryDark"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#73000000"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:visibility="@{isLoading?View.VISIBLE:View.GONE,default=gone}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addGroupFloating"
-                android:src="@drawable/ic_add_group"
-                app:backgroundTint="@color/white"
-                app:borderWidth="2dp"
-                app:rippleColor="@color/colorPrimaryDark"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
             <ProgressBar
                 android:id="@+id/groupProgressBar"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{isLoading?View.VISIBLE:View.GONE,default=gone}" />
+                android:layout_centerInParent="true" />
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,18 +5,18 @@ public class Constants {
     public static final String BASE_CUS_URL = "http://192.168.42.105/moapp/";
 
     // 192.168.42.108
-    public static final String BASE_PRO_URL = "http://192.168.42.108/moapp/server/";
-    public static final String BASE_IMAGE_CATE_URL = "http://192.168.42.108/moapp/image/categories/";
-    public static final String BASE_IMAGE_PRO_URL = "http://192.168.42.108/moapp/image/product/";
+    public static final String BASE_PRO_URL = "http://192.168.0.108/moapp/server/";
+    public static final String BASE_IMAGE_CATE_URL = "http://192.168.0.108/moapp/image/categories/";
+    public static final String BASE_IMAGE_PRO_URL = "http://192.168.0.108/moapp/image/product/";
     public static final String BASE_ADDRESS_URL = "https://thongtindoanhnghiep.co/api/";
 
-//    public static final String BASE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/";
+//    public static final String BASE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/server/";
 //    public static final String BASE_IMAGE_CATE_URL = "https://danhtran12797.000webhostapp.com/moapp/image/categories/";
 //    public static final String BASE_IMAGE_PRO_URL = "https://danhtran12797.000webhostapp.com/moapp/image/product/";
 
     public static final int CONNECTION_TIMEOUT = 10; // 10 seconds
-    public static final int READ_TIMEOUT = 2; // 2 seconds
-    public static final int WRITE_TIMEOUT = 2; // 2 seconds
+    public static final int READ_TIMEOUT = 10; // 2 seconds
+    public static final int WRITE_TIMEOUT = 10; // 2 seconds
 
     public static final String KEY_GROUP_ID = "key group id";
     public static final String KEY_GROUP_NAME = "key group name";

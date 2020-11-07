@@ -14,8 +14,8 @@ public class ScreenUtils {
     private int width;
     private int height;
 
-    public static ScreenUtils getInstance(){
-        if (screenUtils == null){
+    public static ScreenUtils getInstance() {
+        if (screenUtils == null) {
             screenUtils = new ScreenUtils();
         }
         return screenUtils;
@@ -31,15 +31,15 @@ public class ScreenUtils {
         height = size.y;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return width;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 
-    public float getDensity(){
+    public float getDensity() {
         return App.getContext().getResources().getDisplayMetrics().density;
     }
 

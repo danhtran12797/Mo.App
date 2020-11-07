@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.thd.danhtran12797.moapp"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 

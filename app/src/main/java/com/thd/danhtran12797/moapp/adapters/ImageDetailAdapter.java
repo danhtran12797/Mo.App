@@ -1,5 +1,6 @@
 package com.thd.danhtran12797.moapp.adapters;
 
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,10 @@ public class ImageDetailAdapter extends RecyclerView.Adapter<ImageDetailAdapter.
 
     public void setLstImageDetail(List<ImageDetail> lstImageDetail) {
         this.lstImageDetail = lstImageDetail;
+    }
+
+    public List<ImageDetail> getLstImageDetail(){
+        return this.lstImageDetail;
     }
 
     public String getIdImageDetail() {

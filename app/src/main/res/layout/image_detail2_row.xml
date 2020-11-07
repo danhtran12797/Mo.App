@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/imageDetail"
             android:productImage="@{imageDetail.image}"
-            android:src="@drawable/bangkeo"
+            android:src="@drawable/default_placeholder_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

@@ -29,7 +29,6 @@ public class GroupRepository {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 if (response.isSuccessful()) {
-                    Log.d("AAA", "onResponse: " + response.body().get(0).getName());
                     groupMutableLiveData.setValue(response.body());
                 }
             }
