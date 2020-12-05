@@ -60,4 +60,25 @@ public class ProductViewModel extends ViewModel {
         return productRepository.updateImage(id, image);
     }
 
+    public LiveData<String> uploadImage(Uri uri, String to) {
+        return productRepository.uploadImage(uri, to);
+    }
+
+    public LiveData<String> insertProduct(String id_cate, String name_pro, String price,
+                                          String quantity, String spec, String material, String thickness,
+                                          String width, String length, String color, String adh_force, String elas,
+                                          String charac, String unit, String bearing, String exp_date, String json_images) {
+
+        return productRepository.insertProduct(id_cate, name_pro, price, quantity, spec,
+                material, thickness, width, length, color, adh_force, elas, charac, unit, bearing, exp_date, json_images);
+    }
+
+    public LiveData<String> getTotalPage(String search_name){
+        return productRepository.getTotalPage(search_name);
+    }
+
+    public LiveData<List<Product>> getProductFromSearch(String search_name, int view_type, int page) {
+        return productRepository.getProductFromSearch(search_name, view_type, page);
+    }
+
 }

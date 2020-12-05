@@ -1,28 +1,14 @@
 package com.thd.danhtran12797.moapp.models;
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.thd.danhtran12797.moapp.R;
 
-import java.io.Serializable;
+import java.util.List;
 
-import static com.thd.danhtran12797.moapp.utils.Constants.BASE_IMAGE_CATE_URL;
-
-public class Category implements Serializable {
+public class Category {
 
     @SerializedName("id")
     @Expose
@@ -30,31 +16,14 @@ public class Category implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("image")
+    @SerializedName("products")
     @Expose
-    private String image;
+    private List<Product> products = null;
 
-    private boolean isAddCate;
-
-    public boolean isAddCate() {
-        return isAddCate;
-    }
-
-    public void setAddCate(boolean addCate) {
-        isAddCate = addCate;
-    }
-
-    public Category() {
-        this.isAddCate = false;
-        this.id = "";
-        this.name = "";
-        this.image = "";
-    }
-
-    public Category(String id, String name, String image) {
+    public Category(String id, String name, List<Product> products) {
         this.id = id;
         this.name = name;
-        this.image = image;
+        this.products = products;
     }
 
     public String getId() {
@@ -73,40 +42,27 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    @BindingAdapter("android:categoryImage")
-    public static void loadImage(ImageView imageView, String imageUrl) {
-        if (imageUrl == null)
-            return;
-        Glide.with(imageView)
-                .load(BASE_IMAGE_CATE_URL + imageUrl)
-                .placeholder(R.drawable.default_placeholder_image)
-                .error(R.drawable.error_image)
-                .centerInside()
-                .into(imageView);
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return id.equals(category.getId()) &&
-                name.equals(category.getName()) &&
-                image.equals(category.getImage()) &&
-                isAddCate == category.isAddCate();
+        Category group = (Category) o;
+        return id.equals(group.getId()) &&
+                name.equals(group.getName()) &&
+                products.equals(group.products);
     }
 
 //    @Override
 //    public int hashCode() {
-//        return Objects.hash(id, name, image);
+//        return Objects.hash(id, name, categories);
 //    }
 
     public static DiffUtil.ItemCallback<Category> itemCallback = new DiffUtil.ItemCallback<Category>() {

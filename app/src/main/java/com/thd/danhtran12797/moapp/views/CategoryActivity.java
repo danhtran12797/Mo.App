@@ -1,12 +1,11 @@
 package com.thd.danhtran12797.moapp.views;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,42 +13,42 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.thd.danhtran12797.moapp.R;
+import com.thd.danhtran12797.moapp.adapters.CategoryAdapter;
 import com.thd.danhtran12797.moapp.adapters.ProductAdapter;
 import com.thd.danhtran12797.moapp.databinding.ActivityCategoryBinding;
+import com.thd.danhtran12797.moapp.databinding.CustomActionItemLayoutBinding;
 import com.thd.danhtran12797.moapp.databinding.EditCategoryCustomBinding;
+import com.thd.danhtran12797.moapp.databinding.NavHeaderBinding;
 import com.thd.danhtran12797.moapp.models.Category;
-import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.List;
 
 import static com.thd.danhtran12797.moapp.utils.Constants.ACTIVITY_REQUEST;
 import static com.thd.danhtran12797.moapp.utils.Constants.DATA_CHANGE;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
-import static com.thd.danhtran12797.moapp.utils.Constants.KEY_GROUP_ID;
+import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_NAME;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_PRODUCT_ID;
 
-public class CategoryActivity extends BaseActivity implements ProductAdapter.ProductInterface {
+public class CategoryActivity extends BaseActivity implements CategoryAdapter.CategoryInterface, ProductAdapter.ProductInterface, NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String PRODUCT_URL = "https://firebasestorage.googleapis.com/v0/b/appmusicfrist.appspot.com/o/image_app%2Fimg_vn%2Fimage_product.jpg?alt=media&token=352d0ad5-ae56-4a2d-b568-afb1bc30ee7a";
-
+    private static final String TAG = "CategoryActivity";
+    private CategoryAdapter categoryAdapter;
     private ActivityCategoryBinding categoryBinding;
-    private ProductAdapter productAdapter;
-    private CategoryViewModel categoryViewModel;
-    private Category category;
-    private Uri imageUri;
     private EditCategoryCustomBinding editCategoryCustomBinding;
-    private boolean isDataChange = false;
-    private Dialog editCateDialogs;
+
+    private CategoryViewModel categoryViewModel;
+    private NavHeaderBinding navHeaderBinding;
+    private CustomActionItemLayoutBinding actionItemLayoutBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,92 +56,22 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
         categoryBinding = ActivityCategoryBinding.inflate(getLayoutInflater());
         setContentView(categoryBinding.getRoot());
 
-        setSupportActionBar(categoryBinding.categoryToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        if (getIntent() != null) {
-            category = (Category) getIntent().getSerializableExtra(KEY_CATEGORY);
-//            groupId = getIntent().getStringExtra(KEY_GROUP_ID);
-            getSupportActionBar().setTitle(category.getName());
-        }
-
-        categoryBinding.categoryToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBack();
-            }
-        });
-
-        categoryBinding.addProductFloating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openActivityAddProduct();
-            }
-        });
-
-//        dummyData();
-
-        productAdapter = new ProductAdapter(this);
-        categoryBinding.categoryRecyclerView.setAdapter(productAdapter);
-        categoryBinding.categoryRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        categoryAdapter = new CategoryAdapter(CategoryActivity.this, CategoryActivity.this);
         categoryBinding.categoryRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        categoryBinding.categoryRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        categoryBinding.categoryRecyclerView.setAdapter(categoryAdapter);
 
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         categoryViewModel.getIsChangeData().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 categoryBinding.setIsLoading(true);
-                categoryViewModel.getProducts(category.getId()).observe(CategoryActivity.this, new Observer<List<Product>>() {
+                categoryViewModel.getCategories().observe(CategoryActivity.this, new Observer<List<Category>>() {
                     @Override
-                    public void onChanged(List<Product> products) {
+                    public void onChanged(List<Category> categories) {
                         categoryBinding.setIsLoading(false);
-                        productAdapter.submitList(products);
-                        if(products.size()!=0)
-                            categoryBinding.emptyProductLayout.setVisibility(View.GONE);
-                        else
-                            categoryBinding.emptyProductLayout.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        });
-    }
-
-    public void openActivityAddProduct() {
-        Intent intent = new Intent(CategoryActivity.this, ProductDetailActivity.class);
-        intent.putExtra(KEY_CATEGORY_ID, category.getId());
-        startActivityForResult(intent, ACTIVITY_REQUEST);
-    }
-
-    @Override
-    public void onBackPressed() {
-        onBack();
-    }
-
-    public void onBack() {
-        Intent intent = new Intent();
-        intent.putExtra(DATA_CHANGE, isDataChange);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
-    public void showDeleteCategoryDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("Xóa danh mục");
-        builder.setMessage("Bạn có đồng ý xóa danh mục?");
-        builder.setIcon(R.drawable.ic_baseline_warning);
-        builder.setCancelable(false);
-        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                categoryViewModel.deleteCategory(category.getId()).observe(CategoryActivity.this, new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        if (s != null) {
-                            if (s.equals("success")) {
-                                Toast.makeText(CategoryActivity.this, "Xóa danh mục thành công", Toast.LENGTH_SHORT).show();
-                                isDataChange = true;
-                                onBack();
-                            }
+                        if (categories != null) {
+                            categoryAdapter.submitList(categories);
                         } else {
                             Toast.makeText(CategoryActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
                         }
@@ -150,71 +79,84 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
                 });
             }
         });
-        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+
+        categoryBinding.addCategoryFloating.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+            public void onClick(View view) {
+                showAddCategoryDialog();
             }
         });
-        builder.show();
+
+        initToolBar();
+        initDrawer();
     }
 
-    public void showEditCategoryDialog() {
-        imageUri = null;
+    private void initToolBar() {
+        setSupportActionBar(categoryBinding.categoryToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        categoryBinding.categoryToolbar.setNavigationOnClickListener(view -> {
+            finish();
+        });
+    }
+
+
+    private void initDrawer() {
+        categoryBinding.navView.setNavigationItemSelectedListener(this);
+
+        View headerView = categoryBinding.navView.getHeaderView(0);
+        navHeaderBinding = NavHeaderBinding.bind(headerView);
+//        initHeaderView();
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, categoryBinding.drawerLayout, categoryBinding.categoryToolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        categoryBinding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    public void showAddCategoryDialog() {
         if (editCategoryCustomBinding != null)
             editCategoryCustomBinding = null;
 
-        editCateDialogs = new Dialog(this);
+        Dialog dialogs = new Dialog(this);
         editCategoryCustomBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.edit_category_custom, null, false);
-        editCateDialogs.setContentView(editCategoryCustomBinding.getRoot());
-        editCateDialogs.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        editCateDialogs.setCancelable(false);
-        editCateDialogs.show();
-
-        editCategoryCustomBinding.title.setText("Cập nhật danh mục");
-        editCategoryCustomBinding.setCategory(category);
-
-        editCategoryCustomBinding.imageEditLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 checkPermission(CategoryActivity.this, false);
-            }
-        });
+        dialogs.setContentView(editCategoryCustomBinding.getRoot());
+        dialogs.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogs.setCancelable(false);
+        dialogs.show();
 
         editCategoryCustomBinding.negativeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editCateDialogs.dismiss();
+                dialogs.dismiss();
             }
         });
 
         editCategoryCustomBinding.positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameCate = editCategoryCustomBinding.nameCateTextView.getText().toString();
-                if (!nameCate.matches("")) {
-                    editCategoryCustomBinding.setIsLoading(true);
+                String nameCategory = editCategoryCustomBinding.nameCategoryTextView.getText().toString();
+                if (!nameCategory.matches("")) {
                     editCategoryCustomBinding.negativeButton.setEnabled(false);
                     editCategoryCustomBinding.positiveButton.setEnabled(false);
-                    if (imageUri != null) {
-//                        File file = new File(imageUri.getPath());
-                        categoryViewModel.uploadImage(imageUri, "cate").observe(CategoryActivity.this, new Observer<String>() {
-                            @Override
-                            public void onChanged(String s) {
-                                if (s != null) {
-                                    if (!s.equals("failed")) {
-                                        updateCategory(nameCate, s);
-                                    }
-                                } else {
-                                    editCateDialogs.dismiss();
-                                    Toast.makeText(CategoryActivity.this, "Vui lòng kiểm tra Internet!", Toast.LENGTH_SHORT).show();
+                    editCategoryCustomBinding.setIsLoading(true);
+                    categoryViewModel.insertCategory(nameCategory).observe(CategoryActivity.this, new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            editCategoryCustomBinding.negativeButton.setEnabled(true);
+                            editCategoryCustomBinding.positiveButton.setEnabled(true);
+                            editCategoryCustomBinding.setIsLoading(false);
+                            if (s != null) {
+                                if (s.equals("success")) {
+                                    Toast.makeText(CategoryActivity.this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
+                                    dialogs.dismiss();
+                                    categoryViewModel.setIsChangeData();
                                 }
+                            } else {
+                                dialogs.dismiss();
+                                Toast.makeText(CategoryActivity.this, "Vui lòng kiểm tra Internet", Toast.LENGTH_SHORT).show();
                             }
-                        });
-                    } else {
-                        updateCategory(nameCate, category.getImage());
-                    }
-
+                        }
+                    });
                 } else {
                     Toast.makeText(CategoryActivity.this, "Vui lòng nhập tên danh mục!", Toast.LENGTH_SHORT).show();
                 }
@@ -222,73 +164,87 @@ public class CategoryActivity extends BaseActivity implements ProductAdapter.Pro
         });
     }
 
-    public void updateCategory(String nameCate, String imageCate) {
-        categoryViewModel.updateCategory(category.getId(), nameCate, imageCate).observe(CategoryActivity.this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                editCategoryCustomBinding.setIsLoading(false);
-//                editCategoryCustomBinding.negativeButton.setEnabled(true);
-//                editCategoryCustomBinding.positiveButton.setEnabled(true);
-                editCateDialogs.dismiss();
-                if (s != null) {
-                    if (s.equals("success")) {
-                        Toast.makeText(CategoryActivity.this, "Cập nhật danh mục thành công", Toast.LENGTH_SHORT).show();
-                        isDataChange = true;
-                        getSupportActionBar().setTitle(nameCate);
-                    }
-                }
-            }
-        });
+    public void openActivityAddProduct(String id_cate) {
+        Intent intent = new Intent(CategoryActivity.this, ProductDetailActivity.class);
+        intent.putExtra(KEY_CATEGORY_ID, id_cate);
+        startActivityForResult(intent, ACTIVITY_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                imageUri = result.getUri();
-                editCategoryCustomBinding.imageCategory.setImageURI(imageUri);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        } else if (requestCode == ACTIVITY_REQUEST && resultCode == RESULT_OK && data != null) {
-            boolean isChane = data.getBooleanExtra(DATA_CHANGE, false);
-            if (isChane)
+        if (requestCode == ACTIVITY_REQUEST && resultCode == RESULT_OK && data != null) {
+            boolean dataChane = data.getBooleanExtra(DATA_CHANGE, false);
+            Log.d(TAG, "onActivityResult: " + dataChane);
+            if (dataChane)
                 categoryViewModel.setIsChangeData();
         }
     }
 
     @Override
+    public void onItemClick(Category category) {
+        Intent intent = new Intent(this, CategoryDetailActivity.class);
+        intent.putExtra(KEY_CATEGORY_ID, category.getId());
+        intent.putExtra(KEY_CATEGORY_NAME, category.getName());
+        startActivityForResult(intent, ACTIVITY_REQUEST);
+    }
+
+    @Override
+    public void onItemClick(String id_pro) {
+        Intent intent = new Intent(this, ProductDetailActivity.class);
+        intent.putExtra(KEY_PRODUCT_ID, id_pro);
+        startActivityForResult(intent, ACTIVITY_REQUEST);
+    }
+
+    @Override
+    public void onAddItemClick(String id_cate) {
+        openActivityAddProduct(id_cate);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_category:
+                Toast.makeText(this, "CATEGORY", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_my_fav:
+                Toast.makeText(this, "FAV", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        categoryBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.category_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        final MenuItem menuItem = menu.findItem(R.id.menu_cart_category);
+
+        View view_badge_cart = menuItem.getActionView();
+        actionItemLayoutBinding=CustomActionItemLayoutBinding.bind(view_badge_cart);
+        actionItemLayoutBinding.cartBadge.setText(String.valueOf(123));
+
+//        setupBadge();
+
+        view_badge_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_search:
-                startActivity(new Intent(this, SearchProductActivity.class));
+            case R.id.menu_cart_category:
+
                 break;
-            case R.id.menu_add_product:
-                openActivityAddProduct();
-                break;
-            case R.id.menu_delete_category:
-                showDeleteCategoryDialog();
-                break;
-            case R.id.menu_edit_category:
-                showEditCategoryDialog();
+            case R.id.menu_search_category:
+                startActivity(new Intent(CategoryActivity.this, SearchProductActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onItemClick(Product product) {
-        Intent intent = new Intent(this, ProductDetailActivity.class);
-        intent.putExtra(KEY_PRODUCT_ID, product.getId());
-        startActivityForResult(intent, ACTIVITY_REQUEST);
-    }
-
 }

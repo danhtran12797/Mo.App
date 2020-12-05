@@ -1,6 +1,7 @@
 package com.thd.danhtran12797.moapp.adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -22,11 +23,11 @@ public class ImageDetail2Adapter extends RecyclerView.Adapter<ImageDetail2Adapte
 
     private List<ImageDetail> lstImageDetail;
     private LayoutInflater layoutInflater;
-    private boolean type = false;
+    private ImageDetail2Interface imageDetail2Interface;
 
-    public ImageDetail2Adapter(boolean type) {
+    public ImageDetail2Adapter(ImageDetail2Interface imageDetail2Interface) {
         this.lstImageDetail = new ArrayList<>();
-        this.type = type;
+        this.imageDetail2Interface=imageDetail2Interface;
     }
 
     public void setLstImageDetail(List<ImageDetail> lstImageDetail) {
@@ -60,14 +61,20 @@ public class ImageDetail2Adapter extends RecyclerView.Adapter<ImageDetail2Adapte
             super(imageDetail2RowBinding.getRoot());
             this.imageDetail2RowBinding = imageDetail2RowBinding;
 
-            if (type) {
-                int size = ScreenUtils.getInstance().dpToPx(30);
-                itemView.setLayoutParams(new CardView.LayoutParams(size, size));
-            }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    imageDetail2Interface.onItemClick(getAdapterPosition());
+                }
+            });
         }
 
         public void bind(ImageDetail imageDetail) {
             imageDetail2RowBinding.setImageDetail(imageDetail);
         }
+    }
+
+    public interface ImageDetail2Interface{
+        void onItemClick(int pos);
     }
 }

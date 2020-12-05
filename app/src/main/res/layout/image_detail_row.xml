@@ -22,7 +22,6 @@
             android:background="@drawable/custome_background_image_detail_press">
 
             <ImageView
-                android:id="@+id/imageDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

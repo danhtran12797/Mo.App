@@ -1,5 +1,6 @@
 package com.thd.danhtran12797.moapp.models;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -81,9 +82,26 @@ public class Product implements Serializable {
     @Expose
     private List<ImageDetail> imageDetail = null;
 
+    private boolean isAddPro;
+
+    public boolean isAddPro() {
+        return isAddPro;
+    }
+
+    public void setAddPro(boolean addPro) {
+        isAddPro = addPro;
+    }
+
+    public Product() {
+        this.isAddPro = false;
+        this.id = "";
+        this.name = "";
+    }
+
     public String getImageFirst() {
-        if (imageDetail != null && imageDetail.size() > 0)
+        if (imageDetail != null && imageDetail.size() > 0){
             return imageDetail.get(0).getImage();
+        }
         return null;
     }
 
@@ -236,7 +254,6 @@ public class Product implements Serializable {
                 .load(BASE_IMAGE_PRO_URL + imageUrl)
                 .placeholder(R.drawable.default_placeholder_image)
                 .error(R.drawable.error_image)
-                .centerInside()
                 .into(imageView);
     }
 
@@ -246,7 +263,7 @@ public class Product implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return name.equals(product.name) &&
-                spec.equals(product.spec) &&
+                price.equals(product.price) &&
                 imageDetail.equals(product.imageDetail);
     }
 

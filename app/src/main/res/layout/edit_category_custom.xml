@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable
-            name="category"
-            type="com.thd.danhtran12797.moapp.models.Category" />
         <variable
             name="isLoading"
             type="Boolean" />
@@ -33,54 +28,8 @@
                 android:textColor="#000"
                 android:textSize="22sp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/imageEditLayout"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/takePhotoImage"
-                    android:elevation="6dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_add_a_photo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageCategoryCardView"
-                    app:layout_constraintStart_toEndOf="@+id/imageCategoryCardView"
-                    app:tint="@color/colorAccent" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/imageCategoryCardView"
-                    android:background="?attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" >
-                    <ImageView
-                        android:categoryImage="@{category.image}"
-                        android:src="@drawable/product_placeholder"
-                        android:id="@+id/imageCategory"
-                        android:scaleType="centerInside"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </androidx.cardview.widget.CardView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <EditText
-                android:id="@+id/nameCateTextView"
-                android:text="@{category.name}"
+                android:id="@+id/nameCategoryTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

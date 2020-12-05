@@ -34,7 +34,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="đi mẫu"
+                android:text="Đi mẫu"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 app:layout_constraintBottom_toBottomOf="@+id/notifyPriceTextView"
                 app:layout_constraintEnd_toStartOf="@+id/orderTextView"

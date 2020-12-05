@@ -1,6 +1,8 @@
 package com.thd.danhtran12797.moapp.repositories;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -157,6 +159,97 @@ public class ProductRepository {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.d("AAA", "onFailure: updateImage: " + t.getMessage());
+                mutableLiveData.setValue(null);
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public MutableLiveData<String> insertProduct(String id_cate, String name_pro, String price,
+                                                 String quantity, String spec, String material, String thickness,
+                                                 String width, String length, String color, String adh_force, String elas,
+                                                 String charac, String unit, String bearing, String exp_date, String json_images) {
+
+        MutableLiveData<String> inserMultableLivaData = new MutableLiveData<>();
+        productApi.InsertProduct(id_cate, name_pro, price, quantity, spec, material, thickness, width, length, color,
+                adh_force, elas, charac, unit, bearing, exp_date, json_images)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.isSuccessful())
+                            inserMultableLivaData.setValue(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d("AAA", "onFailure: " + t.getMessage());
+                        inserMultableLivaData.setValue(null);
+                    }
+                });
+        return inserMultableLivaData;
+    }
+
+    public LiveData<String> uploadImage(Uri uri, String to) {
+        MutableLiveData<String> nameMutableLiveData = new MutableLiveData<>();
+
+        Bitmap fullSizeBitmap = BitmapFactory.decodeFile(uri.getPath());
+
+        Bitmap reduceBitmap = ImageResizer.reduceBitmapSize(fullSizeBitmap, 480000);
+
+        File reduceFile = ImageResizer.saveBitmap(reduceBitmap);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), reduceFile);
+        RequestBody requestBody1 = RequestBody.create(MediaType.parse("text/plain"), to);
+
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload_file", reduceFile.getName(), requestBody);
+        productApi.UploadImage(body, requestBody1).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful())
+                    nameMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("AAA", "onFailure: uploadImage: " + t.getMessage());
+                nameMutableLiveData.setValue(null);
+            }
+        });
+
+        return nameMutableLiveData;
+    }
+
+    public LiveData<String> getTotalPage(String search_name) {
+        MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
+        productApi.GetTotalPage(search_name).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful())
+                    mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("AAA", "onFailure: " + t.getMessage());
+                mutableLiveData.setValue(null);
+            }
+        });
+        return mutableLiveData;
+    }
+
+    // search_name, view_type, page
+    public LiveData<List<Product>> getProductFromSearch(String search_name, int view_type, int page) {
+        MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
+        productApi.GetProductFromSearch(search_name, view_type, page).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful())
+                    mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("AAA", "onFailure: " + t.getMessage());
                 mutableLiveData.setValue(null);
             }
         });

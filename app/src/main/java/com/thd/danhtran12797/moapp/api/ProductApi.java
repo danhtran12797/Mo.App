@@ -1,7 +1,6 @@
 package com.thd.danhtran12797.moapp.api;
 
 import com.thd.danhtran12797.moapp.models.Category;
-import com.thd.danhtran12797.moapp.models.Group;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.models.UploadMultiResponse;
 
@@ -9,7 +8,6 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -22,41 +20,41 @@ import retrofit2.http.Query;
 
 public interface ProductApi {
 
-    @GET("GetGroupAll.php")
-    Call<List<Group>> GetGroupAll();
+    @GET("GetCategoryAll.php")
+    Call<List<Category>> GetCategoryAll();
 
-    @GET("GetGroupDetail.php")
-    Call<List<Category>> GetGroupDetail(@Query("id_group") String idGroup);
+    @GET("GetCategoryDetail.php")
+    Call<List<Product>> GetCategoryDetail(@Query("id_cate") String idCate);
 
-    @GET("GetCategory.php")
-    Call<List<Product>> GetCategory(@Query("id_cate") String id_category);
+//    @GET("GetCategory.php")
+//    Call<List<Product>> GetCategory(@Query("id_cate") String id_category);
 
     @GET("GetProduct.php")
     Call<Product> GetProduct(@Query("id_product") String id_product);
 
     @FormUrlEncoded
-    @POST("InsertGroup.php")
-    Call<String> InsertGroup(@Field("name_group_cate") String name_group_cate);
+    @POST("InsertCategory.php")
+    Call<String> InsertCategory(@Field("name") String name_cate);
 
     @Multipart
     @POST("UploadImage.php")
     Call<String> UploadImage(@Part MultipartBody.Part photo, @Part("to") RequestBody to);
 
-    @FormUrlEncoded
-    @POST("InsertCategory.php")
-    Call<String> InsertCategory(@Field("id_group") String id_group, @Field("name_cate") String name_cate, @Field("image_cate") String image_cate);
-
-    @FormUrlEncoded
-    @POST("UpdateGroup.php")
-    Call<String> UpdateGroup(@Field("id_group_cate") String id_group_cate, @Field("name_group_cate") String name_group_cate);
-
-    @FormUrlEncoded
-    @POST("DeleteGroup.php")
-    Call<String> DeleteGroup(@Field("id_group_cate") String id_group_cate);
+//    @FormUrlEncoded
+//    @POST("InsertCategory.php")
+//    Call<String> InsertCategory(@Field("id_group") String id_group, @Field("name_cate") String name_cate, @Field("image_cate") String image_cate);
 
     @FormUrlEncoded
     @POST("UpdateCategory.php")
-    Call<String> UpdateCategory(@Field("id_cate") String id_cate, @Field("name_cate") String name_cate, @Field("image_cate") String image_cate);
+    Call<String> UpdateCategory(@Field("id_cate") String id_cate, @Field("name_cate") String name_cate);
+
+    @FormUrlEncoded
+    @POST("DeleteCategory.php")
+    Call<String> DeleteCategory(@Field("id_cate") String id_cate);
+
+//    @FormUrlEncoded
+//    @POST("UpdateCategory.php")
+//    Call<String> UpdateCategory(@Field("id_cate") String id_cate, @Field("name_cate") String name_cate, @Field("image_cate") String image_cate);
 
     @FormUrlEncoded
     @POST("InsertProduct.php")
@@ -74,9 +72,9 @@ public interface ProductApi {
                                @Field("adh_force") String adh_force, @Field("elas") String elas, @Field("charac") String charac, @Field("unit") String unit,
                                @Field("bearing") String bearing, @Field("exp_date") String exp_date);
 
-    @FormUrlEncoded
-    @POST("DeleteCategory.php")
-    Call<String> DeleteCategory(@Field("id_cate") String id_cate);
+//    @FormUrlEncoded
+//    @POST("DeleteCategory.php")
+//    Call<String> DeleteCategory(@Field("id_cate") String id_cate);
 
     @FormUrlEncoded
     @POST("DeleteProduct.php")

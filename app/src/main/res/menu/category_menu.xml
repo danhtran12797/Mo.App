@@ -3,18 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_search"
+        android:id="@+id/menu_search_category"
         android:icon="@drawable/ic_baseline_search_24"
-        android:title="Search"
-        app:showAsAction="ifRoom" />
+        android:title="search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_cart_category"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:title="shoping cart"
+        app:actionLayout="@layout/custom_action_item_layout"
+        app:showAsAction="always" />
 
-    <item
-        android:id="@+id/menu_add_product"
-        android:title="Thêm sản phẩm" />
-    <item
-        android:id="@+id/menu_edit_category"
-        android:title="Chỉnh sửa danh mục" />
-    <item
-        android:id="@+id/menu_delete_category"
-        android:title="Xóa danh mục" />
 </menu>

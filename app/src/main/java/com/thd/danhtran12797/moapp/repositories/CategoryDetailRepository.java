@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.thd.danhtran12797.moapp.api.ProductApi;
 import com.thd.danhtran12797.moapp.api.ProductService;
-import com.thd.danhtran12797.moapp.models.Category;
+import com.thd.danhtran12797.moapp.models.Product;
 
 import java.util.List;
 
@@ -15,32 +15,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GroupDetailRepository {
+public class CategoryDetailRepository {
     private ProductApi productApi;
 
-    public GroupDetailRepository() {
+    public CategoryDetailRepository() {
         productApi = ProductService.getProductApi();
     }
 
-    public LiveData<List<Category>> getCategories(String id) {
-        MutableLiveData<List<Category>> cateMutableLiveData = new MutableLiveData<>();
-        productApi.GetGroupDetail(id).enqueue(new Callback<List<Category>>() {
+    public LiveData<List<Product>> getProducts(String id_cate) {
+        MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
+        productApi.GetCategoryDetail(id_cate).enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                cateMutableLiveData.setValue(response.body());
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mutableLiveData.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                cateMutableLiveData.setValue(null);
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                mutableLiveData.setValue(null);
             }
         });
-        return cateMutableLiveData;
+        return mutableLiveData;
     }
 
-    public LiveData<String> updateGroup(String idGroup, String nameGroup) {
+    public LiveData<String> updateCategory(String id_cate, String name_cate) {
         MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
-        productApi.UpdateGroup(idGroup, nameGroup).enqueue(new Callback<String>() {
+        productApi.UpdateCategory(id_cate, name_cate).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 mutableLiveData.setValue(response.body());
@@ -55,9 +55,9 @@ public class GroupDetailRepository {
         return mutableLiveData;
     }
 
-    public LiveData<String> deleteGroup(String idGroup) {
+    public LiveData<String> deleteCategory(String id_cate) {
         MutableLiveData<String> mutableLiveData = new MutableLiveData<>();
-        productApi.DeleteGroup(idGroup).enqueue(new Callback<String>() {
+        productApi.DeleteCategory(id_cate).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 mutableLiveData.setValue(response.body());

@@ -1,15 +1,15 @@
 package com.thd.danhtran12797.moapp.viewmodels;
 
-import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.thd.danhtran12797.moapp.models.Category;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.repositories.CategoryRepository;
 
-import java.io.File;
 import java.util.List;
 
 public class CategoryViewModel extends ViewModel {
@@ -30,40 +30,12 @@ public class CategoryViewModel extends ViewModel {
         isChangeData.setValue(!isChangeData.getValue());
     }
 
-    public LiveData<List<Product>> getProducts(String categoryId) {
-        return categoryRepository.getProducts(categoryId);
+    public LiveData<List<Category>> getCategories() {
+        return categoryRepository.getCategories();
     }
 
-    public LiveData<String> uploadImage(Uri uri, String to) {
-        return categoryRepository.uploadImage(uri, to);
+    public LiveData<String> insertCategory(String name_cate) {
+        return categoryRepository.insertCategory(name_cate);
     }
 
-    public LiveData<String> insertCategory(String groupId, String nameCate, String imageCate) {
-        return categoryRepository.insertCategory(groupId, nameCate, imageCate);
-    }
-
-    public LiveData<String> updateCategory(String id, String nameCate, String imageCate) {
-        return categoryRepository.updateCategory(id, nameCate, imageCate);
-    }
-
-    public LiveData<String> deleteCategory(String categoryId) {
-        return categoryRepository.deleteCategory(categoryId);
-    }
-
-    public LiveData<String> insertProduct(String id_cate, String name_pro, String price,
-                                          String quantity, String spec, String material, String thickness,
-                                          String width, String length, String color, String adh_force, String elas,
-                                          String charac, String unit, String bearing, String exp_date, String json_images) {
-
-        return categoryRepository.insertProduct(id_cate, name_pro, price, quantity, spec,
-                material, thickness, width, length, color, adh_force, elas, charac, unit, bearing, exp_date, json_images);
-    }
-
-    public LiveData<String> getTotalPage(String search_name){
-        return categoryRepository.getTotalPage(search_name);
-    }
-
-    public LiveData<List<Product>> getProductFromSearch(String search_name, int view_type, int page) {
-        return categoryRepository.getProductFromSearch(search_name, view_type, page);
-    }
 }

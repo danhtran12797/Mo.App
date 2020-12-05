@@ -8,57 +8,53 @@
         <variable
             name="product"
             type="com.thd.danhtran12797.moapp.models.Product" />
-
-        <variable
-            name="productInterface"
-            type="com.thd.danhtran12797.moapp.adapters.ProductAdapter.ProductInterface" />
     </data>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="@{()->productInterface.onItemClick(product)}"
-        android:padding="8dp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/nameProductTextView"
-            app:cardCornerRadius="6dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/productImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_above="@+id/nameProductTextView"
                 android:productImage="@{product.imageFirst}"
+                android:scaleType="centerCrop"
                 android:src="@drawable/default_placeholder_image" />
-        </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:id="@+id/nameProductTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/text_color"
+                android:layout_above="@+id/priceProductTextView"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{product.name}"
+                tools:text="BK trong" />
+            <TextView
+                android:id="@+id/priceProductTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="@{product.price+`đ`}"
+                tools:text="2000đ" />
 
-        <TextView
-            android:id="@+id/nameProductTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/specTextView"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@{product.name}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#000"
-            tools:text="Băng keo trong - 50 mic" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/specTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@{product.spec}"
-            tools:text="Qui cách: 4F8* 100Y (90 mét)" />
-    </RelativeLayout>
-
+    </androidx.cardview.widget.CardView>
 </layout>
+

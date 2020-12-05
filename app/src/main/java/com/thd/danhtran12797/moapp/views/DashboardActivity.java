@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.thd.danhtran12797.moapp.R;
 import com.thd.danhtran12797.moapp.databinding.ActivityDashboardBinding;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -25,6 +24,6 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void clickProduct(View view) {
-        startActivity(new Intent(this, GroupActivity.class));
+        startActivity(new Intent(this, CategoryActivity.class));
     }
 }

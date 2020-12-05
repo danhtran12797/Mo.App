@@ -5,118 +5,74 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.thd.danhtran12797.moapp.databinding.AddCategoryRowBinding;
 import com.thd.danhtran12797.moapp.databinding.CategoryRowBinding;
 import com.thd.danhtran12797.moapp.models.Category;
-import com.thd.danhtran12797.moapp.utils.ScreenUtils;
+import com.thd.danhtran12797.moapp.adapters.ProductAdapter.ProductInterface;
+import com.thd.danhtran12797.moapp.models.Product;
 
-public class CategoryAdapter extends ListAdapter<Category, RecyclerView.ViewHolder> {
+import java.util.List;
 
-    private static final int CATEGORY_TYPE = 1;
-    private static final int ADD_CATE_TYPE = 2;
+public class CategoryAdapter extends ListAdapter<Category, CategoryAdapter.CategoryViewHolder> {
 
+    private LayoutInflater layoutInflater;
     private CategoryInterface categoryInterface;
-    private String groupId;
+    private ProductInterface productInterface;
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public CategoryAdapter(CategoryInterface categoryInterface) {
+    public CategoryAdapter(CategoryInterface categoryInterface, ProductInterface productInterface) {
         super(Category.itemCallback);
         this.categoryInterface = categoryInterface;
+        this.productInterface = productInterface;
     }
-
-    // submit()
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ADD_CATE_TYPE: {
-                LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-                AddCategoryRowBinding addCategoryRowBinding = AddCategoryRowBinding.inflate(layoutInflater, parent, false);
-                return new AddCateViewModel(addCategoryRowBinding);
-            }
-            case CATEGORY_TYPE: {
-                LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-                CategoryRowBinding categoryRowBinding = CategoryRowBinding.inflate(layoutInflater, parent, false);
-                return new CategoryViewHolder(categoryRowBinding);
-            }
-            default: {
-                LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-                CategoryRowBinding categoryRowBinding = CategoryRowBinding.inflate(layoutInflater, parent, false);
-                return new CategoryViewHolder(categoryRowBinding);
-            }
-        }
+    public CategoryAdapter.CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (layoutInflater == null)
+            layoutInflater = LayoutInflater.from(parent.getContext());
+        CategoryRowBinding categoryRowBinding = CategoryRowBinding.inflate(layoutInflater, parent, false);
+        categoryRowBinding.setCategoryInterface(categoryInterface);
+        return new CategoryViewHolder(categoryRowBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if (getItemViewType(position) != ADD_CATE_TYPE) {
-            ((CategoryViewHolder) viewHolder).bind(getItem(position));
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (getItem(position).isAddCate())
-            return ADD_CATE_TYPE;
-        return CATEGORY_TYPE;
+    public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
+        holder.bind(getItem(position));
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
-
         CategoryRowBinding categoryRowBinding;
 
         public CategoryViewHolder(CategoryRowBinding categoryRowBinding) {
             super(categoryRowBinding.getRoot());
 
             this.categoryRowBinding = categoryRowBinding;
-
-            int size = ScreenUtils.getInstance().getWidth() / 3;
-            itemView.setLayoutParams(new CardView.LayoutParams(size, size));
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    categoryInterface.onItemClick(getItem(getAdapterPosition()), groupId);
-                }
-            });
         }
 
         public void bind(Category category) {
+            if (category.getProducts().size() >= 6)
+                categoryRowBinding.seeMoreImageView.setVisibility(View.VISIBLE);
             categoryRowBinding.setCategory(category);
+            setProductItemRecycler(categoryRowBinding.productRecyclerView, category.getProducts());
+            categoryRowBinding.executePendingBindings();
         }
-    }
 
-    public class AddCateViewModel extends RecyclerView.ViewHolder {
-        AddCategoryRowBinding addCategoryRowBinding;
-
-        public AddCateViewModel(AddCategoryRowBinding addCategoryRowBinding) {
-            super(addCategoryRowBinding.getRoot());
-            this.addCategoryRowBinding = addCategoryRowBinding;
-
-//                int size = ScreenUtils.getInstance().getWidth() / 3;
-//                itemView.setLayoutParams(new CardView.LayoutParams(size, size));
-
-            addCategoryRowBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    categoryInterface.onAddItemClick(groupId);
-                }
-            });
+        public void setProductItemRecycler(RecyclerView recyclerView, List<Product> productsItemList) {
+            ProductAdapter productAdapter = new ProductAdapter(productInterface);
+            productAdapter.setCategoryId(getItem(getAdapterPosition()).getId());
+            recyclerView.setAdapter(productAdapter);
+            if (productsItemList.size() < 6) {
+                Product product = new Product();
+                product.setAddPro(true);
+                productsItemList.add(product);
+            }
+            productAdapter.submitList(productsItemList);
         }
     }
 
     public interface CategoryInterface {
-        void onItemClick(Category category, String groupId);
-
-        void onAddItemClick(String groupId);
+        void onItemClick(Category category);
     }
-
 }

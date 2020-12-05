@@ -25,7 +25,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.thd.danhtran12797.moapp.adapters.ProductAdapter;
 import com.thd.danhtran12797.moapp.databinding.ActivitySearchProductBinding;
 import com.thd.danhtran12797.moapp.models.Product;
-import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
+import com.thd.danhtran12797.moapp.viewmodels.ProductViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
     private static final String TAG = "SearchProductActivity";
 
     private ActivitySearchProductBinding searchProductBinding;
-    private CategoryViewModel categoryViewModel;
+    private ProductViewModel productViewModel;
     private boolean isDataChange = false;
     private int total_page = 0;
     private int page = 0;
@@ -71,7 +71,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
         searchProductBinding.searchRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         gridLayoutManager = (GridLayoutManager) searchProductBinding.searchRecyclerView.getLayoutManager();
 
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         initAutocompleteSearch();
         eventScrollRecyclerView();
@@ -144,7 +144,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
     }
 
     private void getTotalPage(String search_name, int view_type, int page) {
-        categoryViewModel.getTotalPage(search_name).observe(this, new Observer<String>() {
+        productViewModel.getTotalPage(search_name).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null) {
@@ -168,7 +168,7 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
         }
 
         searchProductBinding.setIsLoading(true);
-        categoryViewModel.getProductFromSearch(search_name, view_type, page).observe(this, new Observer<List<Product>>() {
+        productViewModel.getProductFromSearch(search_name, view_type, page).observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
                 searchProductBinding.setIsLoading(false);
@@ -275,9 +275,14 @@ public class SearchProductActivity extends BaseActivity implements ProductAdapte
     }
 
     @Override
-    public void onItemClick(Product product) {
+    public void onItemClick(String id_pro) {
         Intent intent = new Intent(this, ProductDetailActivity.class);
-        intent.putExtra(KEY_PRODUCT_ID, product.getId());
+        intent.putExtra(KEY_PRODUCT_ID, id_pro);
         startActivityForResult(intent, ACTIVITY_REQUEST);
+    }
+
+    @Override
+    public void onAddItemClick(String id_cate) {
+
     }
 }

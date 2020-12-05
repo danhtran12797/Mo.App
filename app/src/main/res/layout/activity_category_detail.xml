@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/groupDetailAppBarLayout"
+            android:id="@+id/categoryDetailAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
@@ -27,13 +27,13 @@
             app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/groupDetailToolbar"
+                android:id="@+id/categoryDetailToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/groupDetailRecyclerView"
+            android:id="@+id/categoryDetailRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/backgroundGroupDetail"
@@ -41,11 +41,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupDetailAppBarLayout"
+            app:layout_constraintTop_toBottomOf="@+id/categoryDetailAppBarLayout"
             app:spanCount="3" />
 
         <LinearLayout
-            android:id="@+id/emptyCateLayout"
+            android:id="@+id/emptyProductLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/backgroundGroupDetail"
@@ -55,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupDetailAppBarLayout">
+            app:layout_constraintTop_toBottomOf="@+id/categoryDetailAppBarLayout">
 
             <ImageView
                 android:layout_width="110dp"
@@ -66,13 +66,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Danh mục trống"
+                android:text="Sản phẩm trống"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#ccc" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addCategoryFloating"
+            android:id="@+id/addProductFloating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

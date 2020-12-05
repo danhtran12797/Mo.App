@@ -20,7 +20,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -33,7 +32,6 @@ import com.thd.danhtran12797.moapp.databinding.DialogImageDetailBinding;
 import com.thd.danhtran12797.moapp.models.ImageDetail;
 import com.thd.danhtran12797.moapp.models.Product;
 import com.thd.danhtran12797.moapp.models.UploadMultiResponse;
-import com.thd.danhtran12797.moapp.viewmodels.CategoryViewModel;
 import com.thd.danhtran12797.moapp.viewmodels.ProductViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -49,7 +47,7 @@ import static com.thd.danhtran12797.moapp.utils.Constants.KEY_CATEGORY_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.KEY_PRODUCT_ID;
 import static com.thd.danhtran12797.moapp.utils.Constants.PICK_IMAGE_MULTIPLE;
 
-public class ProductDetailActivity extends BaseActivity implements ImageDetailAdapter.ImageDetailInterface, PopupMenu.OnMenuItemClickListener {
+public class ProductDetailActivity extends BaseActivity implements ImageDetailAdapter.ImageDetailInterface, PopupMenu.OnMenuItemClickListener, ImageDetail2Adapter.ImageDetail2Interface {
 
     private static final String TAG = "DetailProductActivity";
 
@@ -58,7 +56,6 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
     private DialogCropImageBinding cropImageBinding;
     private String productId;
     private ProductViewModel productViewModel;
-    private CategoryViewModel categoryViewModel;
     private boolean hideMenu = false;
     private boolean isDataChange = false;
     private String categoryId;
@@ -67,7 +64,6 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
     private Dialog cropImageDialog;
     private ImageDetailAdapter imageDetailAdapter;
     private ImageDetail2Adapter imageDetail2Adapter;
-    private ImageDetail2Adapter imageDetail2Adapter1;
     private List<Uri> mArrayUri;
     private List<Bitmap> lstBitmapCrop;
     private boolean isEdit = false;
@@ -90,23 +86,13 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
             }
         });
 
-//        detailProductBinding.takePhotoImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                checkPermission(ProductDetailActivity.this);
-//            }
-//        });
-
-        detailProductBinding.imageProduct.setOnClickListener(new View.OnClickListener() {
+        detailProductBinding.imagePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
-                    showProductDetailDialog(isEdit);
-                } else {
-                    checkPermission(ProductDetailActivity.this, true);
-                }
+                checkPermission(ProductDetailActivity.this, true);
             }
         });
+
 
         detailProductBinding.saveProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +135,6 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
             }
         });
 
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
@@ -166,33 +151,30 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
                             detailProductBinding.setProduct(product);
 
                             detailProductBinding.countImageTextView.setVisibility(View.GONE);
-                            if (product.getImageDetail().size() > 1)
-                                detailProductBinding.imageDetailRecyclerView.setVisibility(View.VISIBLE);
-                            else
-                                detailProductBinding.imageDetailRecyclerView.setVisibility(View.GONE);
+                            detailProductBinding.countImageTextView1.setText("1/"+product.getImageDetail().size());
 
                             imageDetailAdapter.setLstImageDetail(product.getImageDetail());
                             imageDetailAdapter.notifyDataSetChanged();
                             imageDetail2Adapter.setLstImageDetail(product.getImageDetail());
                             imageDetail2Adapter.notifyDataSetChanged();
 
-                            imageDetail2Adapter1 = new ImageDetail2Adapter(true);
-                            imageDetail2Adapter1.setLstImageDetail(product.getImageDetail());
-                            detailProductBinding.imageDetailRecyclerView.setAdapter(imageDetail2Adapter1);
-                            detailProductBinding.imageDetailRecyclerView.addItemDecoration(new DividerItemDecoration(ProductDetailActivity.this, DividerItemDecoration.VERTICAL));
                         }
                     });
                 }
             });
 
             detailProductBinding.setEnableView(false);
+
         } else {
             categoryId = getIntent().getStringExtra(KEY_CATEGORY_ID);
             detailProductBinding.setEnableView(true);
-            detailProductBinding.imageDetailRecyclerView.setVisibility(View.GONE);
             invalidateOptionsMenu();
             hideMenu = true;
             isEdit = true;
+
+            detailProductBinding.viewPager2.setVisibility(View.GONE);
+            detailProductBinding.countImageTextView1.setVisibility(View.GONE);
+            detailProductBinding.imagePhoto.setVisibility(View.VISIBLE);
         }
 
         initImageDetail();
@@ -222,15 +204,8 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
                 if (currentCropImage > mArrayUri.size()) {
                     cropImageDialog.dismiss();
                     detailProductBinding.countImageTextView.setVisibility(View.VISIBLE);
-                    if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
-                        detailProductBinding.countImageTextView.setText("+" + lstBitmapCrop.size());
-                    } else {
-                        detailProductBinding.imageProduct.setImageBitmap(lstBitmapCrop.get(0));
-                        if (lstBitmapCrop.size() > 1){
-                            detailProductBinding.countImageTextView.setText("+" + (lstBitmapCrop.size() - 1));
-                        }else if(lstBitmapCrop.size()==1)
-                            detailProductBinding.countImageTextView.setVisibility(View.GONE);
-                    }
+
+                    detailProductBinding.countImageTextView.setText("+" + lstBitmapCrop.size());
                 } else {
                     cropImageBinding.currentCropTextView.setText(currentCropImage + "");
                     cropImageBinding.cropImageView.setImageUriAsync(mArrayUri.get(currentCropImage - 1));
@@ -332,14 +307,22 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
         imageDetailAdapter = new ImageDetailAdapter(this);
         imageDetailBinding.imageDetailRecyclerView.setAdapter(imageDetailAdapter);
 
-        imageDetail2Adapter = new ImageDetail2Adapter(false);
+        imageDetail2Adapter = new ImageDetail2Adapter(ProductDetailActivity.this);
+        detailProductBinding.viewPager2.setAdapter(imageDetail2Adapter);
         imageDetailBinding.viewPager2.setAdapter(imageDetail2Adapter);
         imageDetailBinding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                Log.d(TAG, "onPageSelected: " + position);
                 imageDetailAdapter.setPosPress(position);
+            }
+        });
+
+        detailProductBinding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                detailProductBinding.countImageTextView1.setText((position+1)+"/"+imageDetailAdapter.getLstImageDetail().size());
             }
         });
 
@@ -351,7 +334,8 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
         });
     }
 
-    public void showProductDetailDialog(boolean isEdit) {
+    public void showProductDetailDialog(boolean isEdit, int position) {
+        imageDetailBinding.viewPager2.setCurrentItem(position);
         if (isEdit)
             imageDetailBinding.editImageMenu.setVisibility(View.VISIBLE);
         else
@@ -396,7 +380,7 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
 
     public void uploadImage(Uri imageUri) {
         detailProductBinding.setIsLoading(true);
-        categoryViewModel.uploadImage(imageUri, "pro").observe(ProductDetailActivity.this, new Observer<String>() {
+        productViewModel.uploadImage(imageUri, "pro").observe(ProductDetailActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s != null) {
@@ -410,7 +394,7 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
     }
 
     public void insertProduct(String json_images) {
-        categoryViewModel.insertProduct(categoryId, name_pro, price, "1",
+        productViewModel.insertProduct(categoryId, name_pro, price, "1",
                 spec, material, thickness, width, length,
                 color, adh_force, elas, charac, unit, bearing, exp_date, json_images).observe(this, new Observer<String>() {
             @Override
@@ -597,5 +581,12 @@ public class ProductDetailActivity extends BaseActivity implements ImageDetailAd
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void onItemClick(int pos) {
+        if (getIntent().hasExtra(KEY_PRODUCT_ID)) {
+            showProductDetailDialog(isEdit, pos);
+        }
     }
 }

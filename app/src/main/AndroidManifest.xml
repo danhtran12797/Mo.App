@@ -50,14 +50,12 @@
 
         </activity>
         <activity
+            android:name=".views.CategoryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".views.CategoryActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.GroupDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.GroupActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>
